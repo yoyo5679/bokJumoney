@@ -330,16 +330,17 @@ function calcResult() {
     else if (answers.income === '100-250만원') needScore += 15;
     else if (answers.income === '250-450만원') needScore += 5;
 
-    // 가구 점수: 다자녀/한부모 우대
+    // 가구 점수: 다자녀/한부모/장애인 우대
     // answers.household가 다중 선택(Array)인지 확인 후 처리 (V15 멀티셀렉트)
     const activeHouseholds = Array.isArray(answers.household) ? answers.household : [answers.household || '1인가구'];
-    if (activeHouseholds.some(h => ['다자녀', '한부모', '자녀있음'].includes(h))) needScore += 10;
+    if (activeHouseholds.some(h => ['다자녀', '한부모', '자녀있음', '장애인'].includes(h))) needScore += 10;
     if (activeHouseholds.includes('1인가구') || activeHouseholds.includes('신혼부부')) needScore += 5;
+    if (activeHouseholds.some(h => ['다문화가족', '보훈대상자'].includes(h))) needScore += 8;
 
     // 데이터 준비
     const incomeMap = { '100만원미만': 50, '100-250만원': 200, '250-450만원': 350, '450만원이상': 700 };
     const incomeNum = incomeMap[answers.income] || 300;
-    const householdMap = { '1인가구': 1, '신혼부부': 2, '일반부부': 2, '자녀있음': 3, '다자녀': 4, '한부모': 2, '자립준비청년': 1, '청년': 1, '기타': 2 };
+    const householdMap = { '1인가구': 1, '신혼부부': 2, '일반부부': 2, '자녀있음': 3, '다자녀': 4, '한부모': 2, '자립준비청년': 1, '청년': 1, '장애인': 2, '다문화가족': 2, '보훈대상자': 2, '기타': 2 };
     // 다중 선택 시 가장 큰 값을 기준으로 가구원 수 결정
     let familyCount = 1;
     activeHouseholds.forEach(h => {
@@ -544,28 +545,6 @@ function showResult() {
         }
     });
 
-    // ── V20: 자립준비청년 선택 시 전용 혜택 카드 맞춤혜택 최상단 추가 ──
-    // 다중 선택(Array) 대응
-    if (Array.isArray(answers.household) ? answers.household.includes('자립준비청년') : answers.household === '자립준비청년') {
-        currentBenefits.custom.unshift({
-            name: '자립준비청년 맞춤 지원사업 안내',
-            tag: '아동권리보장원',
-            desc: '보호종료 후 자립을 준비하는 청년을 위한 주거·취업·생활·심리 맞춤 지원사업 통합 포털. 나에게 맞는 지원을 한눈에 확인하세요.',
-            applyUrl: 'https://jaripon.ncrc.or.kr/home/kor/support/projectMng/index.do',
-            monthlyAmount: 0,
-            icon: '🌱',
-            relevance: 9999
-        });
-        currentBenefits.custom.unshift({
-            name: '자립준비청년 자립수당 (월 40만원)',
-            tag: '아동권리보장원',
-            desc: '보호종료 후 5년 이내 자립준비청년에게 자립활동비로 매월 40만원 지급. 만 24세 이하 대상.',
-            applyUrl: 'https://jaripon.ncrc.or.kr/home/kor/support/projectMng/index.do',
-            monthlyAmount: 400000,
-            icon: '💰',
-            relevance: 9998
-        });
-    }
 
     // 지역별 정렬 최적화 (relevance 높은 것 상단)
     currentBenefits.local.sort((a, b) => (b.relevance || 0) - (a.relevance || 0));
@@ -938,7 +917,10 @@ function chatSearch(query) {
         '자녀': '자녀있음', '아이': '자녀있음',
         '다자녀': '다자녀', '3명': '다자녀',
         '한부모': '한부모', '미혼모': '한부모', '미혼부': '한부모',
-        '청년': '청년', '자립준비': '자립준비청년'
+        '청년': '청년', '자립준비': '자립준비청년',
+        '장애인': '장애인', '장애': '장애인',
+        '다문화': '다문화가족', '탈북': '다문화가족', '결혼이민': '다문화가족',
+        '보훈': '보훈대상자', '국가유공자': '보훈대상자', '보훈대상': '보훈대상자'
     };
 
     let targetAge = null, targetCategory = null, targetHousehold = null;
