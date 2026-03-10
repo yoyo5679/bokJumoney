@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🏛️ 사회복지사 키우기</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body,
+    #root {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Noto Sans KR', sans-serif
+    }
+
+    body {
+      background: #1a1a2a
+    }
+
+    .flex {
+      display: flex
+    }
+
+    .flex-col {
+      flex-direction: column
+    }
+
+    .flex-1 {
+      flex: 1 1 0%
+    }
+
+    .grid {
+      display: grid
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+
+    .grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr))
+    }
+
+    .block {
+      display: block
+    }
+
+    .fixed {
+      position: fixed
+    }
+
+    .absolute {
+      position: absolute
+    }
+
+    .relative {
+      position: relative
+    }
+
+    .inset-0 {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0
+    }
+
+    .top-0 {
+      top: 0
+    }
+
+    .top-1 {
+      top: .25rem
+    }
+
+    .top-4 {
+      top: 1rem
+    }
+
+    .top-20 {
+      top: 5rem
+    }
+
+    .bottom-0 {
+      bottom: 0
+    }
+
+    .left-0 {
+      left: 0
+    }
+
+    .left-1 {
+      left: .25rem
+    }
+
+    .right-0 {
+      right: 0
+    }
+
+    .right-4 {
+      right: 1rem
+    }
+
+    .z-20 {
+      z-index: 20
+    }
+
+    .z-30 {
+      z-index: 30
+    }
+
+    .z-50 {
+      z-index: 50
+    }
+
+    .w-full {
+      width: 100%
+    }
+
+    .w-5 {
+      width: 1.25rem
+    }
+
+    .w-6 {
+      width: 1.5rem
+    }
+
+    .h-screen {
+      height: 100vh
+    }
+
+    .h-full {
+      height: 100%
+    }
+
+    .h-3 {
+      height: .75rem
+    }
+
+    .h-4 {
+      height: 1rem
+    }
+
+    .h-5 {
+      height: 1.25rem
+    }
+
+    .h-6 {
+      height: 1.5rem
+    }
+
+    .min-w-0 {
+      min-width: 0
+    }
+
+    .max-w-sm {
+      max-width: 24rem
+    }
+
+    .max-w-md {
+      max-width: 28rem
+    }
+
+    .max-w-2xl {
+      max-width: 42rem
+    }
+
+    .p-1 {
+      padding: .25rem
+    }
+
+    .p-1\.5 {
+      padding: .375rem
+    }
+
+    .p-2 {
+      padding: .5rem
+    }
+
+    .p-3 {
+      padding: .75rem
+    }
+
+    .p-4 {
+      padding: 1rem
+    }
+
+    .p-6 {
+      padding: 1.5rem
+    }
+
+    .px-1 {
+      padding-left: .25rem;
+      padding-right: .25rem
+    }
+
+    .px-1\.5 {
+      padding-left: .375rem;
+      padding-right: .375rem
+    }
+
+    .px-2 {
+      padding-left: .5rem;
+      padding-right: .5rem
+    }
+
+    .px-3 {
+      padding-left: .75rem;
+      padding-right: .75rem
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem
+    }
+
+    .px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem
+    }
+
+    .py-0\.5 {
+      padding-top: .125rem;
+      padding-bottom: .125rem
+    }
+
+    .py-1 {
+      padding-top: .25rem;
+      padding-bottom: .25rem
+    }
+
+    .py-1\.5 {
+      padding-top: .375rem;
+      padding-bottom: .375rem
+    }
+
+    .py-2 {
+      padding-top: .5rem;
+      padding-bottom: .5rem
+    }
+
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem
+    }
+
+    .pb-14 {
+      padding-bottom: 3.5rem
+    }
+
+    .mx-1 {
+      margin-left: .25rem;
+      margin-right: .25rem
+    }
+
+    .mx-2 {
+      margin-left: .5rem;
+      margin-right: .5rem
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    .mt-0\.5 {
+      margin-top: .125rem
+    }
+
+    .mt-1 {
+      margin-top: .25rem
+    }
+
+    .mt-1\.5 {
+      margin-top: .375rem
+    }
+
+    .mt-2 {
+      margin-top: .5rem
+    }
+
+    .mt-3 {
+      margin-top: .75rem
+    }
+
+    .mt-4 {
+      margin-top: 1rem
+    }
+
+    .mt-5 {
+      margin-top: 1.25rem
+    }
+
+    .mb-0\.5 {
+      margin-bottom: .125rem
+    }
+
+    .mb-1 {
+      margin-bottom: .25rem
+    }
+
+    .mb-2 {
+      margin-bottom: .5rem
+    }
+
+    .mb-3 {
+      margin-bottom: .75rem
+    }
+
+    .mb-4 {
+      margin-bottom: 1rem
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem
+    }
+
+    .gap-1 {
+      gap: .25rem
+    }
+
+    .gap-1\.5 {
+      gap: .375rem
+    }
+
+    .gap-2 {
+      gap: .5rem
+    }
+
+    .gap-5 {
+      gap: 1.25rem
+    }
+
+    .space-y-0\.5>*+* {
+      margin-top: .125rem
+    }
+
+    .space-y-1>*+* {
+      margin-top: .25rem
+    }
+
+    .space-y-2>*+* {
+      margin-top: .5rem
+    }
+
+    .space-y-3>*+* {
+      margin-top: .75rem
+    }
+
+    .items-center {
+      align-items: center
+    }
+
+    .justify-center {
+      justify-content: center
+    }
+
+    .justify-between {
+      justify-content: space-between
+    }
+
+    .text-center {
+      text-align: center
+    }
+
+    .text-left {
+      text-align: left
+    }
+
+    .text-right {
+      text-align: right
+    }
+
+    .leading-tight {
+      line-height: 1.25
+    }
+
+    .overflow-hidden {
+      overflow: hidden
+    }
+
+    .overflow-y-auto {
+      overflow-y: auto
+    }
+
+    .truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .pointer-events-none {
+      pointer-events: none
+    }
+
+    .cursor-not-allowed {
+      cursor: not-allowed
+    }
+
+    .font-bold {
+      font-weight: 700
+    }
+
+    .font-black {
+      font-weight: 900
+    }
+
+    .text-xs {
+      font-size: .75rem;
+      line-height: 1rem
+    }
+
+    .text-sm {
+      font-size: .875rem;
+      line-height: 1.25rem
+    }
+
+    .text-base {
+      font-size: 1rem;
+      line-height: 1.5rem
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+      line-height: 2rem
+    }
+
+    .text-3xl {
+      font-size: 1.875rem;
+      line-height: 2.25rem
+    }
+
+    .text-4xl {
+      font-size: 2.25rem;
+      line-height: 2.5rem
+    }
+
+    .text-white {
+      color: #fff
+    }
+
+    .text-gray-500 {
+      color: #6b7280
+    }
+
+    .text-gray-600 {
+      color: #4b5563
+    }
+
+    .text-gray-700 {
+      color: #374151
+    }
+
+    .text-gray-800 {
+      color: #1f2937
+    }
+
+    .text-blue-600 {
+      color: #2563eb
+    }
+
+    .text-blue-700 {
+      color: #1d4ed8
+    }
+
+    .text-blue-800 {
+      color: #1e40af
+    }
+
+    .text-blue-900 {
+      color: #1e3a8a
+    }
+
+    .text-green-200 {
+      color: #bbf7d0
+    }
+
+    .text-green-600 {
+      color: #16a34a
+    }
+
+    .text-green-700 {
+      color: #15803d
+    }
+
+    .text-green-800 {
+      color: #166534
+    }
+
+    .text-amber-100 {
+      color: #fef3c7
+    }
+
+    .text-amber-700 {
+      color: #b45309
+    }
+
+    .text-amber-800 {
+      color: #92400e
+    }
+
+    .text-amber-900 {
+      color: #78350f
+    }
+
+    .text-red-200 {
+      color: #fecaca
+    }
+
+    .text-red-600 {
+      color: #dc2626
+    }
+
+    .text-red-700 {
+      color: #b91c1c
+    }
+
+    .text-yellow-100 {
+      color: #fef9c3
+    }
+
+    .text-yellow-200 {
+      color: #fef08a
+    }
+
+    .text-yellow-300 {
+      color: #fde047
+    }
+
+    .text-yellow-700 {
+      color: #a16207
+    }
+
+    .text-yellow-800 {
+      color: #854d0e
+    }
+
+    .text-pink-600 {
+      color: #db2777
+    }
+
+    .text-pink-800 {
+      color: #9d174d
+    }
+
+    .text-purple-700 {
+      color: #7e22ce
+    }
+
+    .text-purple-800 {
+      color: #6b21a8
+    }
+
+    .text-indigo-700 {
+      color: #4338ca
+    }
+
+    .text-orange-700 {
+      color: #c2410c
+    }
+
+    .bg-white {
+      background-color: #fff
+    }
+
+    .bg-black {
+      background-color: #000
+    }
+
+    .bg-gray-200 {
+      background-color: #e5e7eb
+    }
+
+    .bg-gray-400 {
+      background-color: #9ca3af
+    }
+
+    .bg-gray-800 {
+      background-color: #1f2937
+    }
+
+    .bg-green-500 {
+      background-color: #22c55e
+    }
+
+    .bg-red-50 {
+      background-color: #fef2f2
+    }
+
+    .bg-blue-50 {
+      background-color: #eff6ff
+    }
+
+    .bg-yellow-50 {
+      background-color: #fefce8
+    }
+
+    .bg-amber-100 {
+      background-color: #fef3c7
+    }
+
+    .bg-blue-100 {
+      background-color: #dbeafe
+    }
+
+    .bg-green-100 {
+      background-color: #dcfce7
+    }
+
+    .bg-red-100 {
+      background-color: #fee2e2
+    }
+
+    .bg-purple-100 {
+      background-color: #f3e8ff
+    }
+
+    .bg-yellow-100 {
+      background-color: #fef9c3
+    }
+
+    .bg-orange-100 {
+      background-color: #ffedd5
+    }
+
+    .bg-indigo-100 {
+      background-color: #e0e7ff
+    }
+
+    .bg-pink-100 {
+      background-color: #fce7f3
+    }
+
+    .bg-opacity-20 {
+      background-color: rgba(0, 0, 0, .2)
+    }
+
+    .bg-opacity-50 {
+      background-color: rgba(0, 0, 0, .5)
+    }
+
+    .bg-opacity-75 {
+      background-color: rgba(0, 0, 0, .75)
+    }
+
+    .bg-gradient-to-r {
+      background-image: linear-gradient(to right, var(--tw-gradient-stops))
+    }
+
+    .bg-gradient-to-br {
+      background-image: linear-gradient(to bottom right, var(--tw-gradient-stops))
+    }
+
+    .bg-gradient-to-t {
+      background-image: linear-gradient(to top, var(--tw-gradient-stops))
+    }
+
+    .from-amber-900 {
+      --tw-gradient-from: #78350f;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(120, 53, 15, 0))
+    }
+
+    .from-amber-800 {
+      --tw-gradient-from: #92400e;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(146, 64, 14, 0))
+    }
+
+    .from-amber-400 {
+      --tw-gradient-from: #fbbf24;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(251, 191, 36, 0))
+    }
+
+    .from-blue-500 {
+      --tw-gradient-from: #3b82f6;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0))
+    }
+
+    .from-blue-800 {
+      --tw-gradient-from: #1e40af;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(30, 64, 175, 0))
+    }
+
+    .from-green-400 {
+      --tw-gradient-from: #4ade80;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(74, 222, 128, 0))
+    }
+
+    .from-green-500 {
+      --tw-gradient-from: #22c55e;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(34, 197, 94, 0))
+    }
+
+    .from-purple-500 {
+      --tw-gradient-from: #a855f7;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(168, 85, 247, 0))
+    }
+
+    .from-yellow-400 {
+      --tw-gradient-from: #facc15;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250, 204, 21, 0))
+    }
+
+    .from-pink-400 {
+      --tw-gradient-from: #f472b6;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(244, 114, 182, 0))
+    }
+
+    .from-indigo-100 {
+      --tw-gradient-from: #e0e7ff;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(224, 231, 255, 0))
+    }
+
+    .to-amber-800 {
+      --tw-gradient-to: #92400e
+    }
+
+    .to-amber-500 {
+      --tw-gradient-to: #f59e0b
+    }
+
+    .to-blue-900 {
+      --tw-gradient-to: #1e3a8a
+    }
+
+    .to-emerald-500 {
+      --tw-gradient-to: #10b981
+    }
+
+    .to-emerald-600 {
+      --tw-gradient-to: #059669
+    }
+
+    .to-green-500 {
+      --tw-gradient-to: #22c55e
+    }
+
+    .to-indigo-600 {
+      --tw-gradient-to: #4f46e5
+    }
+
+    .to-pink-600 {
+      --tw-gradient-to: #db2777
+    }
+
+    .to-orange-500 {
+      --tw-gradient-to: #f97316
+    }
+
+    .to-rose-500 {
+      --tw-gradient-to: #f43f5e
+    }
+
+    .to-violet-500 {
+      --tw-gradient-to: #8b5cf6
+    }
+
+    .border {
+      border-width: 1px;
+      border-style: solid
+    }
+
+    .border-2 {
+      border-width: 2px;
+      border-style: solid
+    }
+
+    .border-4 {
+      border-width: 4px;
+      border-style: solid
+    }
+
+    .border-t-4 {
+      border-top: 4px solid
+    }
+
+    .border-gray-300 {
+      border-color: #d1d5db
+    }
+
+    .border-amber-300 {
+      border-color: #fcd34d
+    }
+
+    .border-amber-700 {
+      border-color: #b45309
+    }
+
+    .border-amber-950 {
+      border-color: #451a03
+    }
+
+    .border-blue-300 {
+      border-color: #93c5fd
+    }
+
+    .border-blue-400 {
+      border-color: #60a5fa
+    }
+
+    .border-blue-700 {
+      border-color: #1d4ed8
+    }
+
+    .border-blue-800 {
+      border-color: #1e40af
+    }
+
+    .border-blue-950 {
+      border-color: #172554
+    }
+
+    .border-green-400 {
+      border-color: #4ade80
+    }
+
+    .border-green-700 {
+      border-color: #15803d
+    }
+
+    .border-green-800 {
+      border-color: #166534
+    }
+
+    .border-purple-400 {
+      border-color: #c084fc
+    }
+
+    .border-yellow-300 {
+      border-color: #fde047
+    }
+
+    .border-yellow-400 {
+      border-color: #facc15
+    }
+
+    .border-pink-300 {
+      border-color: #f9a8d4
+    }
+
+    .border-indigo-300 {
+      border-color: #a5b4fc
+    }
+
+    .border-orange-300 {
+      border-color: #fdba74
+    }
+
+    .rounded {
+      border-radius: .25rem
+    }
+
+    .rounded-lg {
+      border-radius: .5rem
+    }
+
+    .rounded-xl {
+      border-radius: .75rem
+    }
+
+    .rounded-2xl {
+      border-radius: 1rem
+    }
+
+    .rounded-full {
+      border-radius: 9999px
+    }
+
+    .shadow-lg {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)
+    }
+
+    .shadow-xl {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 10px 10px -5px rgba(0, 0, 0, .04)
+    }
+
+    .transition-all {
+      transition: all .15s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .transition-transform {
+      transition: transform .15s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .duration-300 {
+      transition-duration: .3s
+    }
+
+    .scale-95 {
+      transform: scale(.95)
+    }
+
+    .hover\:scale-105:hover {
+      transform: scale(1.05)
+    }
+
+    .hover\:text-blue-900:hover {
+      color: #1e3a8a
+    }
+
+    .hover\:bg-gray-200:hover {
+      background-color: #e5e7eb
+    }
+
+    .outline-none {
+      outline: none
+    }
+
+    .focus\:border-blue-500:focus {
+      border-color: #3b82f6
+    }
+
+    .focus\:border-purple-500:focus {
+      border-color: #a855f7
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(.8, 0, 1, 1)
+      }
+
+      50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0, 0, .2, 1)
+      }
+    }
+
+    .animate-bounce {
+      animation: bounce 1s infinite
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-8px)
+      }
+    }
+
+    .char-bob {
+      animation: bob 2s ease-in-out infinite
+    }
+
+    .char-bob-delay {
+      animation: bob 2s ease-in-out infinite .5s
+    }
+
+    @keyframes float-up {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(1.2)
+      }
+    }
+
+    .floating-number {
+      animation: float-up 1s ease-out forwards;
+      pointer-events: none
+    }
+
+    @keyframes officeUpgrade {
+      0% {
+        opacity: 0;
+        transform: scale(.5) rotate(-5deg)
+      }
+
+      15% {
+        opacity: 1;
+        transform: scale(1.1) rotate(2deg)
+      }
+
+      25% {
+        transform: scale(1) rotate(0)
+      }
+
+      70% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(.8) translateY(-30px)
+      }
+    }
+
+    .gold-frame {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      border: 3px solid #B8860B;
+      border-radius: 10px;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, .5), 0 4px 12px rgba(0, 0, 0, .3)
+    }
+
+    .work-button {
+      background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%);
+      border: 5px solid #8B4513;
+      border-radius: 14px;
+      box-shadow: inset 0 4px 8px rgba(255, 255, 255, .3), 0 6px 14px rgba(0, 0, 0, .4);
+      transition: all .2s ease;
+      cursor: pointer
+    }
+
+    .work-button:active {
+      transform: translateY(3px);
+      box-shadow: inset 0 4px 8px rgba(255, 255, 255, .3), 0 3px 6px rgba(0, 0, 0, .4)
+    }
+
+    .nav-button {
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+      border: 2px solid #654321;
+      transition: all .2s ease;
+      cursor: pointer;
+      border-radius: .5rem
+    }
+
+    .nav-button.active {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      border-color: #B8860B
+    }
+
+    .card-male {
+      background: linear-gradient(145deg, #e8f4ff, #bcd8f7);
+      border: 4px solid #5b9bd5;
+      border-radius: 20px;
+      transition: all .25s;
+      cursor: pointer
+    }
+
+    .card-male:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 16px 32px rgba(91, 155, 213, .4)
+    }
+
+    .card-female {
+      background: linear-gradient(145deg, #fff0f8, #fac8e8);
+      border: 4px solid #e05aa0;
+      border-radius: 20px;
+      transition: all .25s;
+      cursor: pointer
+    }
+
+    .card-female:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 16px 32px rgba(224, 90, 160, .4)
+    }
+
+    /* 업그레이드 카드 - 컴팩트 */
+    .upgrade-card {
+      border-radius: 8px;
+      border: 2px solid;
+      transition: all .15s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 7px
+    }
+
+    .upgrade-card-skill {
+      background: linear-gradient(135deg, #22c55e, #059669);
+      border-color: #15803d
+    }
+
+    .upgrade-card-equip {
+      background: linear-gradient(135deg, #3b82f6, #4f46e5);
+      border-color: #1d4ed8
+    }
+
+    .upgrade-card-disabled {
+      background: #d1d5db;
+      border-color: #9ca3af;
+      opacity: .6;
+      cursor: not-allowed
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useCallback } = React;
+    const Home = ({ className }) => React.createElement('span', { className, style: { fontSize: '16px' } }, '🏠');
+    const TrendingUp = ({ className }) => React.createElement('span', { className, style: { fontSize: '16px' } }, '📈');
+    const Award = ({ className }) => React.createElement('span', { className, style: { fontSize: '16px' } }, '🏆');
+    const X = ({ className }) => React.createElement('span', { className, style: { fontSize: '18px', fontWeight: 'bold', lineHeight: '1' } }, '✕');
+
+    function RaiseSocialWorker() {
+      const [currentScreen, setCurrentScreen] = useState('character-select');
+      const [gender, setGender] = useState(null);
+      const [userId, setUserId] = useState(null);
+      const [nickname, setNickname] = useState('');
+      const [experience, setExperience] = useState(0);
+      const [level, setLevel] = useState(1);
+      const [money, setMoney] = useState(450);
+      const [clickPower, setClickPower] = useState(1);   // 클릭XP
+      const [clickMoneyPower, setClickMoneyPower] = useState(1); // 클릭돈
+      const [autoXP, setAutoXP] = useState(0);
+      const [autoMoney, setAutoMoney] = useState(0);
+      const [totalClicks, setTotalClicks] = useState(0);
+      const [currentCase, setCurrentCase] = useState(null);
+      const [casesCompleted, setCasesCompleted] = useState({ child: 0, elderly: 0, disability: 0, mental: 0, family: 0 });
+      const [activeMinigame, setActiveMinigame] = useState(null);
+      const [minigameData, setMinigameData] = useState(null);
+      const [minigameCooldowns, setMinigameCooldowns] = useState({ counseling: 0, typing: 0, quiz: 0 });
+      const [typingInput, setTypingInput] = useState('');
+      const [quizInput, setQuizInput] = useState('');
+      const [skills, setSkills] = useState({ empathy: 0, networking: 0, counseling: 0, crisis: 0, stamina: 0, focus: 0, persuasion: 0, leadership: 0 });
+      const [equipment, setEquipment] = useState({ computer: 0, printer: 0, plant: 0, notebook: 0, whiteboard: 0, bookshelf: 0, smartphone: 0, accounting: 0 });
+      const [clickAnimation, setClickAnimation] = useState(false);
+      const [floatingNumbers, setFloatingNumbers] = useState([]);
+      const [showSaveIndicator, setShowSaveIndicator] = useState(false);
+      const [upgradeTab, setUpgradeTab] = useState('skill');
+      const [rankingData, setRankingData] = useState([]);
+      const [rankingLoading, setRankingLoading] = useState(false);
+
+      const SUPABASE_URL = 'https://seldrnpohdkggennjieo.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlbGRybnBvaGRrZ2dlbm5qaWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMzI3MjksImV4cCI6MjA4NzgwODcyOX0.PyzWPa-kwYgh-HmuDELD642TCVn7Ajri54FsR7Ik2Gs';
+      const supabaseHeaders = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Prefer': 'return=representation' };
+      const supabase = {
+        async upsert(data) {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/rankings`, { method: 'POST', headers: { ...supabaseHeaders, 'Prefer': 'resolution=merge-duplicates,return=representation' }, body: JSON.stringify(data) });
+          return res.ok;
+        },
+        async fetchTop() {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/rankings?select=*&order=level.desc,total_clicks.desc&limit=10`, { headers: supabaseHeaders });
+          if (!res.ok) return [];
+          return res.json();
+        }
+      };
+
+      const [caseTimeLeft, setCaseTimeLeft] = useState(0);
+      const [pipetTime, setPipetTime] = useState(0);
+      const [mentalCrash, setMentalCrash] = useState(0);
+      const [showCaseResult, setShowCaseResult] = useState(null);
+
+      const ranks = [
+        { name: '인턴', minLevel: 1, salary: 50, office: 'starter' },
+        { name: '사회복지사', minLevel: 10, salary: 100, office: 'basic' },
+        { name: '선임 사회복지사', minLevel: 20, salary: 200, office: 'intermediate' },
+        { name: '팀장', minLevel: 30, salary: 400, office: 'advanced' },
+        { name: '과장', minLevel: 40, salary: 800, office: 'manager' },
+        { name: '부장', minLevel: 50, salary: 1600, office: 'senior' },
+        { name: '센터장', minLevel: 60, salary: 3200, office: 'director' }
+      ];
+      const getCurrentRank = () => [...ranks].reverse().find(r => level >= r.minLevel) || ranks[0];
+
+      const caseTypes = [
+        { id: 'child', name: '아동', icon: '👶', color: 'from-pink-400 to-rose-500', bonus: 1.2, description: '아동 보호 및 지원' },
+        { id: 'elderly', name: '노인', icon: '👴', color: 'from-amber-400 to-orange-500', bonus: 1.3, description: '노인 돌봄 서비스' },
+        { id: 'family', name: '가족', icon: '👨‍👩‍👧‍👦', color: 'from-green-400 to-emerald-500', bonus: 1.3, description: '가족 지원 서비스' },
+        { id: 'mental', name: '정신', icon: '🧠', color: 'from-purple-400 to-violet-500', bonus: 1.5, description: '정신건강 상담' },
+        { id: 'disability', name: '장애인', icon: '♿', color: 'from-blue-400 to-indigo-500', bonus: 1.4, description: '장애인 지원 서비스' },
+      ];
+
+      const skillsData = [
+        { id: 'empathy', name: '공감능력', icon: '❤️', statType: 'clickXP', statValue: 5, description: '클릭XP +5/레벨', cost: (lvl) => Math.floor(150 * Math.pow(1.5, lvl)) },
+        { id: 'crisis', name: '위기개입', icon: '🚨', statType: 'clickXP', statValue: 15, description: '클릭XP +15/레벨', cost: (lvl) => Math.floor(400 * Math.pow(1.7, lvl)) },
+        { id: 'stamina', name: '체력관리', icon: '💪', statType: 'clickXP', statValue: 8, description: '클릭XP +8/레벨', cost: (lvl) => Math.floor(200 * Math.pow(1.5, lvl)) },
+        { id: 'focus', name: '집중력', icon: '🎯', statType: 'clickXP', statValue: 12, description: '클릭XP +12/레벨', cost: (lvl) => Math.floor(350 * Math.pow(1.6, lvl)) },
+        { id: 'networking', name: '네트워킹', icon: '🤝', statType: 'clickMoney', statValue: 3, description: '클릭돈 +3원/레벨', cost: (lvl) => Math.floor(200 * Math.pow(1.5, lvl)) },
+        { id: 'counseling', name: '상담기술', icon: '💬', statType: 'clickMoney', statValue: 5, description: '클릭돈 +5원/레벨', cost: (lvl) => Math.floor(300 * Math.pow(1.6, lvl)) },
+        { id: 'persuasion', name: '설득력', icon: '🗣️', statType: 'clickMoney', statValue: 10, description: '클릭돈 +10원/레벨', cost: (lvl) => Math.floor(600 * Math.pow(1.7, lvl)) },
+        { id: 'leadership', name: '리더십', icon: '👑', statType: 'clickMoney', statValue: 8, description: '클릭돈 +8원/레벨', cost: (lvl) => Math.floor(500 * Math.pow(1.7, lvl)) },
+      ];
+      const equipmentData = [
+        { id: 'computer', name: '빠른 컴퓨터', icon: '💻', statType: 'autoXP', statValue: 15, description: '자동XP +15/초·레벨', cost: (lvl) => Math.floor(250 * Math.pow(1.5, lvl)) },
+        { id: 'printer', name: '레이저프린터', icon: '🖨️', statType: 'autoXP', statValue: 8, description: '자동XP +8/초·레벨', cost: (lvl) => Math.floor(600 * Math.pow(1.65, lvl)) },
+        { id: 'plant', name: '관엽식물', icon: '🪴', statType: 'autoXP', statValue: 5, description: '자동XP +5/초·레벨', cost: (lvl) => Math.floor(300 * Math.pow(1.4, lvl)) },
+        { id: 'notebook', name: '업무수첩', icon: '📒', statType: 'autoXP', statValue: 10, description: '자동XP +10/초·레벨', cost: (lvl) => Math.floor(200 * Math.pow(1.5, lvl)) },
+        { id: 'whiteboard', name: '화이트보드', icon: '📋', statType: 'autoXP', statValue: 18, description: '자동XP +18/초·레벨', cost: (lvl) => Math.floor(500 * Math.pow(1.7, lvl)) },
+        { id: 'bookshelf', name: '전문서적', icon: '📚', statType: 'autoMoney', statValue: 15, description: '자동돈 +15원/초·레벨', cost: (lvl) => Math.floor(800 * Math.pow(1.7, lvl)) },
+        { id: 'smartphone', name: '스마트폰', icon: '📱', statType: 'autoMoney', statValue: 10, description: '자동돈 +10원/초·레벨', cost: (lvl) => Math.floor(450 * Math.pow(1.6, lvl)) },
+        { id: 'accounting', name: '회계프로그램', icon: '💰', statType: 'autoMoney', statValue: 20, description: '자동돈 +20원/초·레벨', cost: (lvl) => Math.floor(1000 * Math.pow(1.8, lvl)) },
+      ];
+
+      // ── 초기화 ──
+      useEffect(() => {
+        // 비밀노트 앱 아이디 (동기화 코드) 우선 사용
+        let storedUserId = localStorage.getItem('sabok_user_id');
+        if (!storedUserId) {
+          storedUserId = localStorage.getItem('sabok_member_code'); // 하위 호환성
+          if (!storedUserId) {
+            storedUserId = localStorage.getItem('socialWorkerUserId');
+            if (!storedUserId) {
+              storedUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+              localStorage.setItem('socialWorkerUserId', storedUserId);
+            }
+          }
+        }
+        setUserId(storedUserId);
+
+        // 비밀노트 닉네임
+        const sabokNickname = localStorage.getItem('saboks_anonymous_name') || localStorage.getItem('sabok_nickname') || '';
+        if (sabokNickname) setNickname(sabokNickname);
+
+        // 저장된 게임 데이터 로드
+        const savedData = localStorage.getItem(`gameData_${storedUserId}`);
+        let loadedGender = null;
+        let loadedLevel = 1;
+        let loadedClicks = 0;
+        let loadedCases = { child: 0, elderly: 0, disability: 0, mental: 0, family: 0 };
+        if (savedData) {
+          try {
+            const data = JSON.parse(savedData);
+            if (data.gender) {
+              loadedGender = data.gender;
+              setGender(data.gender);
+              setCurrentScreen('game');
+            }
+            loadedLevel = data.level || 1;
+            loadedClicks = data.totalClicks || 0;
+            loadedCases = data.casesCompleted || { child: 0, elderly: 0, disability: 0, mental: 0, family: 0 };
+            setExperience(data.experience || 0);
+            setLevel(data.level || 1);
+            setMoney(data.money || 450);
+            const defaultSkills = { empathy: 0, networking: 0, counseling: 0, crisis: 0, stamina: 0, focus: 0, persuasion: 0, leadership: 0 };
+            const defaultEquipment = { computer: 0, printer: 0, plant: 0, notebook: 0, whiteboard: 0, bookshelf: 0, smartphone: 0, accounting: 0 };
+            setClickPower(data.clickPower || 1);
+            setClickMoneyPower(data.clickMoneyPower || 1);
+            setAutoXP(data.autoXP || 0);
+            setAutoMoney(data.autoMoney || 0);
+            setTotalClicks(data.totalClicks || 0);
+            setSkills({ ...defaultSkills, ...(data.skills || {}) });
+            setEquipment({ ...defaultEquipment, ...(data.equipment || {}) });
+            setCasesCompleted(loadedCases);
+          } catch (e) { /* 데이터 파싱 오류 무시 */ }
+        }
+
+        // ✅ 게임 로드 시 Supabase에 자동 등록 (닉네임 포함)
+        if (loadedGender) {
+          const latestNickname = localStorage.getItem('saboks_anonymous_name') || localStorage.getItem('sabok_nickname') || sabokNickname || '';
+          const supaUrl = 'https://seldrnpohdkggennjieo.supabase.co';
+          const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlbGRybnBvaGRrZ2dlbm5qaWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMzI3MjksImV4cCI6MjA4NzgwODcyOX0.PyzWPa-kwYgh-HmuDELD642TCVn7Ajri54FsR7Ik2Gs';
+          const headers = { 'Content-Type': 'application/json', 'apikey': supaKey, 'Authorization': `Bearer ${supaKey}`, 'Prefer': 'resolution=merge-duplicates,return=representation' };
+          fetch(`${supaUrl}/rest/v1/rankings`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              user_id: storedUserId,
+              nickname: latestNickname,
+              gender: loadedGender,
+              level: loadedLevel,
+              total_clicks: loadedClicks,
+              cases_total: Object.values(loadedCases).reduce((a, b) => a + b, 0),
+              last_saved: new Date().toISOString()
+            })
+          }).catch(() => { });
+        }
+      }, []);
+
+      const saveGameData = useCallback(async () => {
+        if (!userId) return;
+        const gameData = { gender, experience, level, money, clickPower, clickMoneyPower, autoXP, autoMoney, totalClicks, skills, equipment, casesCompleted, lastSaved: Date.now() };
+        localStorage.setItem(`gameData_${userId}`, JSON.stringify(gameData));
+        try {
+          const latestNickname = localStorage.getItem('saboks_anonymous_name') || localStorage.getItem('sabok_nickname') || nickname || '';
+          await supabase.upsert({
+            user_id: userId, nickname: latestNickname, gender, level,
+            total_clicks: totalClicks,
+            cases_total: Object.values(casesCompleted).reduce((a, b) => a + b, 0),
+            last_saved: new Date().toISOString()
+          });
+        } catch (e) { }
+        setShowSaveIndicator(true);
+        setTimeout(() => setShowSaveIndicator(false), 2000);
+      }, [userId, nickname, gender, experience, level, money, clickPower, clickMoneyPower, autoXP, autoMoney, totalClicks, skills, equipment, casesCompleted]);
+
+      useEffect(() => {
+        if (userId && gender) {
+          const interval = setInterval(() => { saveGameData(); }, 30000);
+          return () => clearInterval(interval);
+        }
+      }, [userId, gender, saveGameData]);
+
+      useEffect(() => {
+        if (currentScreen !== 'ranking') return;
+        setRankingLoading(true);
+        supabase.fetchTop()
+          .then(data => { setRankingData(data || []); })
+          .catch(() => {
+            const local = JSON.parse(localStorage.getItem('socialWorker_ranking') || '[]');
+            setRankingData(local);
+          })
+          .finally(() => setRankingLoading(false));
+      }, [currentScreen]);
+
+      useEffect(() => {
+        if (autoXP > 0 || autoMoney > 0) {
+          const interval = setInterval(() => {
+            if (autoXP > 0) setExperience(prev => prev + autoXP);
+            if (autoMoney > 0) setMoney(prev => prev + autoMoney);
+          }, 1000);
+          return () => clearInterval(interval);
+        }
+      }, [autoXP, autoMoney]);
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setMinigameCooldowns(prev => ({
+            counseling: Math.max(0, prev.counseling - 1),
+            typing: Math.max(0, prev.typing - 1),
+            quiz: Math.max(0, prev.quiz - 1),
+          }));
+        }, 1000);
+        return () => clearInterval(interval);
+      }, []);
+
+      const [showOfficeUpgrade, setShowOfficeUpgrade] = useState(false);
+
+      useEffect(() => {
+        const expNeeded = level * 1000;
+        if (experience >= expNeeded) {
+          setExperience(prev => prev - expNeeded);
+          setLevel(prev => {
+            const newLevel = prev + 1;
+            const newStage = newLevel >= 60 ? 6 : newLevel >= 50 ? 5 : newLevel >= 40 ? 4 : newLevel >= 30 ? 3 : newLevel >= 20 ? 2 : newLevel >= 10 ? 1 : 0;
+            const oldStage = prev >= 60 ? 6 : prev >= 50 ? 5 : prev >= 40 ? 4 : prev >= 30 ? 3 : prev >= 20 ? 2 : prev >= 10 ? 1 : 0;
+            if (newStage > oldStage) { setShowOfficeUpgrade(true); setTimeout(() => setShowOfficeUpgrade(false), 3500); }
+            return newLevel;
+          });
+          setMoney(prev => prev + level * 100);
+        }
+      }, [experience, level]);
+
+      useEffect(() => {
+        const scheduleNextCase = () => {
+          const randomDelay = Math.random() * 12000 + 5000;
+          setTimeout(() => {
+            setCurrentCase(prev => {
+              if (!prev && Math.random() > 0.2) {
+                const randomCase = caseTypes[Math.floor(Math.random() * caseTypes.length)];
+                setCaseTimeLeft(15);
+                return randomCase;
+              }
+              return prev;
+            });
+            scheduleNextCase();
+          }, randomDelay);
+        };
+        scheduleNextCase();
+      }, []);
+
+      useEffect(() => {
+        if (!currentCase || caseTimeLeft <= 0) return;
+        const t = setTimeout(() => {
+          setCaseTimeLeft(prev => {
+            if (prev <= 1) {
+              setCurrentCase(null); setMentalCrash(20); setShowCaseResult('fail');
+              setTimeout(() => setShowCaseResult(null), 2500);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+        return () => clearTimeout(t);
+      }, [currentCase, caseTimeLeft]);
+
+      useEffect(() => {
+        if (pipetTime <= 0) return;
+        const t = setTimeout(() => setPipetTime(p => Math.max(0, p - 1)), 1000);
+        return () => clearTimeout(t);
+      }, [pipetTime]);
+
+      useEffect(() => {
+        if (mentalCrash <= 0) return;
+        const t = setTimeout(() => setMentalCrash(p => Math.max(0, p - 1)), 1000);
+        return () => clearTimeout(t);
+      }, [mentalCrash]);
+
+      const handleWork = (e) => {
+        const statusMult = pipetTime > 0 ? 2 : mentalCrash > 0 ? 0.5 : 1;
+        const xpEarned = clickPower * statusMult;
+        const moneyEarned2 = clickMoneyPower * statusMult;
+        setExperience(prev => prev + xpEarned);
+        setMoney(prev => prev + moneyEarned2);
+        setTotalClicks(prev => {
+          const newClicks = prev + 1;
+          // ✅ 10번째 클릭마다 Supabase 자동 업데이트 (닉네임 포함)
+          if (newClicks % 10 === 0 && userId) {
+            const latestNickname = localStorage.getItem('saboks_anonymous_name') || localStorage.getItem('sabok_nickname') || nickname || '';
+            const supaUrl = 'https://seldrnpohdkggennjieo.supabase.co';
+            const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlbGRybnBvaGRrZ2dlbm5qaWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMzI3MjksImV4cCI6MjA4NzgwODcyOX0.PyzWPa-kwYgh-HmuDELD642TCVn7Ajri54FsR7Ik2Gs';
+            const headers = { 'Content-Type': 'application/json', 'apikey': supaKey, 'Authorization': `Bearer ${supaKey}`, 'Prefer': 'resolution=merge-duplicates,return=representation' };
+            fetch(`${supaUrl}/rest/v1/rankings`, {
+              method: 'POST', headers,
+              body: JSON.stringify({ user_id: userId, nickname: latestNickname, gender, level, total_clicks: newClicks, cases_total: Object.values(casesCompleted).reduce((a, b) => a + b, 0), last_saved: new Date().toISOString() })
+            }).catch(() => { });
+          }
+          return newClicks;
+        });
+        if (currentCase) {
+          setCasesCompleted(prev => ({ ...prev, [currentCase.id]: prev[currentCase.id] + 1 }));
+          const caseXP = clickPower * currentCase.bonus * 5;
+          const caseMoney = clickMoneyPower * currentCase.bonus * 5;
+          setExperience(prev => prev + caseXP);
+          setMoney(prev => prev + caseMoney);
+          setCurrentCase(null); setCaseTimeLeft(0); setPipetTime(20);
+          setShowCaseResult('success'); setTimeout(() => setShowCaseResult(null), 2000);
+          const pid = Date.now() + 999;
+          setFloatingNumbers(prev => [...prev, { id: pid, value: '🎉 피펫타임! ×2', x: -20, color: '#f59e0b' }]);
+          setTimeout(() => setFloatingNumbers(prev => prev.filter(n => n.id !== pid)), 2000);
+        }
+        setClickAnimation(true); setTimeout(() => setClickAnimation(false), 200);
+        const id = Date.now();
+        const label = pipetTime > 0 ? `+${Math.floor(xpEarned)} xp ×2🔥` : mentalCrash > 0 ? `+${Math.floor(xpEarned)} xp 💔` : `+${Math.floor(xpEarned)} xp`;
+        setFloatingNumbers(prev => [...prev,
+        { id, value: label, x: Math.random() * 60 - 30, color: pipetTime > 0 ? '#f59e0b' : mentalCrash > 0 ? '#ef4444' : '#16a34a' },
+        { id: id + 1, value: `+${Math.floor(moneyEarned2)}원`, x: Math.random() * 60 + 20, color: '#d97706' }
+        ]);
+        setTimeout(() => { setFloatingNumbers(prev => prev.filter(n => n.id !== id && n.id !== id + 1)); }, 1000);
+      };
+
+      const upgradeSkill = (skillId) => {
+        const skill = skillsData.find(s => s.id === skillId);
+        const cost = skill.cost(skills[skillId]);
+        if (money >= cost) {
+          setMoney(prev => prev - cost);
+          setSkills(prev => ({ ...prev, [skillId]: prev[skillId] + 1 }));
+          if (skillId === 'empathy') setClickPower(prev => prev + 5);
+          if (skillId === 'crisis') setClickPower(prev => prev + 15);
+          if (skillId === 'stamina') setClickPower(prev => prev + 8);
+          if (skillId === 'focus') setClickPower(prev => prev + 12);
+          if (skillId === 'networking') setClickMoneyPower(prev => prev + 3);
+          if (skillId === 'counseling') setClickMoneyPower(prev => prev + 5);
+          if (skillId === 'persuasion') setClickMoneyPower(prev => prev + 10);
+          if (skillId === 'leadership') setClickMoneyPower(prev => prev + 8);
+        }
+      };
+      const upgradeEquipment = (equipId) => {
+        const equip = equipmentData.find(e => e.id === equipId);
+        const cost = equip.cost(equipment[equipId]);
+        if (money >= cost) {
+          setMoney(prev => prev - cost);
+          setEquipment(prev => ({ ...prev, [equipId]: prev[equipId] + 1 }));
+          if (equipId === 'computer') setAutoXP(prev => prev + 15);
+          if (equipId === 'printer') setAutoXP(prev => prev + 8);
+          if (equipId === 'plant') setAutoXP(prev => prev + 5);
+          if (equipId === 'notebook') setAutoXP(prev => prev + 10);
+          if (equipId === 'whiteboard') setAutoXP(prev => prev + 18);
+          if (equipId === 'bookshelf') setAutoMoney(prev => prev + 15);
+          if (equipId === 'smartphone') setAutoMoney(prev => prev + 10);
+          if (equipId === 'accounting') setAutoMoney(prev => prev + 20);
+        }
+      };
+
+      const startMinigame = (gameType) => {
+        if (minigameCooldowns[gameType] > 0) return;
+        if (gameType === 'counseling') {
+          const scenarios = [
+            { question: '클라이언트가 "아무도 날 이해 못해요"라고 말합니다.', options: [{ text: '"제가 이해합니다"', correct: false, feedback: '공감보다 경청이 먼저입니다.' }, { text: '"그런 기분이 드시는군요. 더 말씀해주시겠어요?"', correct: true, feedback: '훌륭한 경청과 공감입니다!' }, { text: '"다른 사람들도 다 그렇게 생각해요"', correct: false, feedback: '클라이언트 감정을 축소시킵니다.' }] },
+            { question: '클라이언트가 위기 상황에 있다고 판단됩니다.', options: [{ text: '즉시 상급자에게 보고', correct: true, feedback: '올바른 위기 대응입니다!' }, { text: '혼자 해결하려 시도', correct: false, feedback: '위기는 팀으로 대응해야 합니다.' }, { text: '다음 상담 때 다시 보기', correct: false, feedback: '위기는 즉각 대응이 필요합니다.' }] },
+            { question: '클라이언트가 계속 침묵하고 있습니다.', options: [{ text: '"왜 말을 안 하세요?"', correct: false, feedback: '압박적으로 느껴질 수 있습니다.' }, { text: '함께 침묵하며 기다리기', correct: true, feedback: '침묵도 의미있는 소통입니다!' }, { text: '다른 주제로 전환', correct: false, feedback: '클라이언트 페이스를 존중해야 합니다.' }] },
+            { question: '노인 클라이언트가 "그냥 죽고 싶다"고 말했습니다.', options: [{ text: '"그런 말씀 하시면 안 돼요"', correct: false, feedback: '감정을 차단하는 반응입니다.' }, { text: '"많이 힘드신가봐요. 어떤 마음인지 더 말씀해주실 수 있나요?"', correct: true, feedback: '자살위험 평가를 위한 적절한 접근입니다!' }, { text: '바로 119에 신고', correct: false, feedback: '먼저 심층 탐색이 필요합니다.' }] },
+            { question: '클라이언트가 명절에 선물을 가져왔습니다.', options: [{ text: '감사히 받음', correct: false, feedback: '전문적 경계 위반입니다.' }, { text: '"마음은 감사하지만 규정상 받을 수 없어요"라고 정중히 거절', correct: true, feedback: '윤리 규정을 준수한 올바른 대응입니다!' }, { text: '모른 척 무시', correct: false, feedback: '클라이언트 감정을 배려하지 않은 행동입니다.' }] },
+            { question: '아동이 학대받고 있다는 의심이 드는 상황입니다.', options: [{ text: '부모에게 먼저 확인', correct: false, feedback: '신고 지연으로 아동이 위험해질 수 있습니다.' }, { text: '아동보호전문기관에 즉시 신고', correct: true, feedback: '아동학대 의심 시 즉시 신고가 원칙입니다!' }, { text: '조금 더 지켜보기', correct: false, feedback: '아동 안전을 위해 즉각 행동해야 합니다.' }] },
+          ];
+          setMinigameData(scenarios[Math.floor(Math.random() * scenarios.length)]);
+          setActiveMinigame('counseling');
+        } else if (gameType === 'typing') {
+          const documents = [
+            { target: '사회복지서비스신청서', hint: '사회복지서비스신청서' },
+            { target: '사례관리계획서', hint: '사례관리계획서' },
+            { target: '욕구사정보고서', hint: '욕구사정보고서' },
+            { target: '가정방문기록지', hint: '가정방문기록지' },
+            { target: '위기개입보고서', hint: '위기개입보고서' },
+            { target: '복지급여신청서', hint: '복지급여신청서' },
+          ];
+          const selected = documents[Math.floor(Math.random() * documents.length)];
+          setMinigameData({ ...selected, timeLeft: 20, maxTime: 20, result: null });
+          setTypingInput(''); setActiveMinigame('typing');
+        } else if (gameType === 'quiz') {
+          const questions = [
+            { question: '기초생활수급자 생계급여 선정 기준은\n기준 중위소득의 몇 %인가요?', options: ['20%', '30%', '32%', '40%'], answer: 2 },
+            { question: '노인장기요양보험 1등급 판정 기준은\n몇 점 이상인가요?', options: ['75점', '85점', '95점', '100점'], answer: 2 },
+            { question: '아동수당 지급 대상은\n만 몇 세 미만인가요?', options: ['6세', '7세', '8세', '10세'], answer: 2 },
+            { question: '기초연금 수급 자격은\n만 몇 세 이상인가요?', options: ['55세', '60세', '65세', '70세'], answer: 2 },
+            { question: '차상위계층 기준은\n기준 중위소득의 몇 % 이하인가요?', options: ['30%', '40%', '50%', '60%'], answer: 2 },
+            { question: '사회복지사 보수교육은\n몇 년마다 받아야 하나요?', options: ['매년', '2년', '3년', '5년'], answer: 0 },
+            { question: '자살예방 상담전화 번호는?', options: ['1393', '1388', '1391', '1395'], answer: 0 },
+            { question: '아동보호전문기관 신고전화 번호는?', options: ['112', '1391', '1377', '120'], answer: 1 },
+            { question: '노인학대 신고전화 번호는?', options: ['1588', '1366', '1577', '1399'], answer: 2 },
+            { question: '장애인 활동지원 신청은\n어디서 하나요?', options: ['병원', '주민센터', '경찰서', '법원'], answer: 1 },
+            { question: '국민기초생활보장법상 부양의무자\n기준이 폐지된 급여는?', options: ['주거급여', '의료급여', '생계급여', '교육급여'], answer: 0 },
+            { question: '사회복지사 1급 시험은\n1년에 몇 회 시행되나요?', options: ['1회', '2회', '3회', '4회'], answer: 0 },
+          ];
+          const q = questions[Math.floor(Math.random() * questions.length)];
+          setMinigameData(q);
+          setActiveMinigame('quiz');
+        }
+      };
+
+      useEffect(() => {
+        if (activeMinigame === 'typing' && minigameData && minigameData.timeLeft > 0 && !minigameData.result) {
+          const timer = setTimeout(() => { setMinigameData(prev => ({ ...prev, timeLeft: prev.timeLeft - 1 })); }, 1000);
+          return () => clearTimeout(timer);
+        }
+      }, [activeMinigame, minigameData]);
+
+      const answerMinigame = (answer) => {
+        if (activeMinigame === 'counseling') {
+          if (answer.correct) {
+            const reward = 500 * (1 + skills.counseling * 0.5);
+            setMoney(prev => prev + reward); setExperience(prev => prev + reward);
+            setMinigameData({ ...minigameData, result: { success: true, message: answer.feedback, reward } });
+          } else {
+            setMinigameData({ ...minigameData, result: { success: false, message: answer.feedback, reward: 0 } });
+          }
+          setMinigameCooldowns(prev => ({ ...prev, counseling: 60 }));
+        } else if (activeMinigame === 'typing') {
+          const isCorrect = typingInput.trim() === minigameData.target && minigameData.timeLeft > 0;
+          if (isCorrect) {
+            const reward = 300 * minigameData.timeLeft;
+            setMoney(prev => prev + reward); setExperience(prev => prev + reward);
+            setMinigameData({ ...minigameData, result: { success: true, message: `완료! 남은 시간: ${minigameData.timeLeft}초`, reward } });
+          } else {
+            setMinigameData({ ...minigameData, result: { success: false, message: minigameData.timeLeft <= 0 ? '시간 초과!' : `오답! "${minigameData.target}"을(를) 입력하세요.`, reward: 0 } });
+          }
+          setMinigameCooldowns(prev => ({ ...prev, typing: 60 }));
+        } else if (activeMinigame === 'quiz') {
+          const isCorrect = answer === minigameData.answer;
+          if (isCorrect) {
+            const reward = 1000;
+            setMoney(prev => prev + reward); setExperience(prev => prev + reward);
+            setMinigameData({ ...minigameData, result: { success: true, message: `정답! ${minigameData.options[minigameData.answer]}`, reward } });
+          } else {
+            setMinigameData({ ...minigameData, result: { success: false, message: `오답! 정답: ${minigameData.options[minigameData.answer]}`, reward: 0 } });
+          }
+          setMinigameCooldowns(prev => ({ ...prev, quiz: 60 }));
+        }
+      };
+      const closeMinigame = () => { setActiveMinigame(null); setMinigameData(null); };
+
+      const currentRank = getCurrentRank();
+      const expNeeded = level * 1000;
+      const expProgress = (experience / expNeeded) * 100;
+
+      const getOfficeStage = () => {
+        if (level >= 60) return 6;
+        if (level >= 50) return 5;
+        if (level >= 40) return 4;
+        if (level >= 30) return 3;
+        if (level >= 20) return 2;
+        if (level >= 10) return 1;
+        return 0;
+      };
+
+      const renderOffice = () => {
+        const stage = getOfficeStage();
+        return (
+          <svg width="300" height="250" viewBox="0 0 300 250" style={{ display: 'block' }}>
+            <defs>
+              <linearGradient id="wallOld" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c5b49a" /><stop offset="100%" stopColor="#b0a088" /></linearGradient>
+              <linearGradient id="wallBasic" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#dde4ef" /><stop offset="100%" stopColor="#c8d3e8" /></linearGradient>
+              <linearGradient id="wallLuxury" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a2340" /><stop offset="100%" stopColor="#243060" /></linearGradient>
+              <linearGradient id="floorWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#c8a97e" /><stop offset="50%" stopColor="#d4b896" /><stop offset="100%" stopColor="#b8926a" /></linearGradient>
+              <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#87CEEB" /><stop offset="100%" stopColor="#b8dff5" /></linearGradient>
+              <linearGradient id="nightSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0a0e2a" /><stop offset="100%" stopColor="#1a2550" /></linearGradient>
+              <linearGradient id="goldAccent" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#f0d060" /><stop offset="100%" stopColor="#c8a020" /></linearGradient>
+            </defs>
+            {stage === 0 && <>
+              <rect x="0" y="0" width="300" height="250" fill="url(#wallOld)" />
+              <polygon points="0,180 300,180 300,250 0,250" fill="#8B7355" />
+              <rect x="220" y="30" width="55" height="45" fill="url(#skyGrad)" rx="2" />
+              <rect x="100" y="5" width="100" height="8" rx="2" fill="#f0f0c0" opacity="0.8" />
+              <polygon points="70,155 210,155 220,170 60,170" fill="#8B7355" />
+              <polygon points="70,155 85,135 225,135 210,155" fill="#9B8365" />
+              <rect x="115" y="118" width="55" height="38" rx="3" fill="#3a3a3a" />
+              <rect x="118" y="121" width="49" height="30" fill={equipment.computer > 0 ? "#2980b9" : "#1a1a2a"} />
+              <ellipse cx="145" cy="195" rx="22" ry="9" fill={true ? "#c0392b" : "#888"} />
+            </>}
+            {(stage === 1 || stage === 2) && <>
+              <rect x="0" y="0" width="300" height="250" fill="url(#wallBasic)" />
+              <polygon points="0,183 300,183 300,250 0,250" fill="url(#floorWood)" />
+              <rect x="15" y="20" width="65" height="70" rx="3" fill="url(#skyGrad)" />
+              <rect x="15" y="20" width="65" height="70" fill="none" stroke="#9ab" strokeWidth="3" rx="3" />
+              <line x1="47" y1="20" x2="47" y2="90" stroke="#9ab" strokeWidth="2" />
+              <line x1="15" y1="55" x2="80" y2="55" stroke="#9ab" strokeWidth="2" />
+              <rect x="90" y="3" width="120" height="10" rx="3" fill="rgba(255,255,240,0.9)" />
+              <polygon points="65,158 215,158 225,173 55,173" fill="#7a6040" />
+              <polygon points="65,158 80,138 230,138 215,158" fill="#8a7050" />
+              <rect x="110" y="122" width="58" height="38" rx="3" fill="#2c3e50" />
+              <rect x="113" y="125" width="52" height="30" fill={equipment.computer > 0 ? "#2980b9" : "#34495e"} />
+              <ellipse cx="147" cy="200" rx="24" ry="10" fill={true ? "#c0392b" : "#7f8c8d"} />
+              {equipment.plant > 0 && <><rect x="30" y="158" width="20" height="18" rx="3" fill="#c0794a" /><ellipse cx="40" cy="155" rx="14" ry="8" fill="#2ecc71" /></>}
+            </>}
+            {(stage === 3 || stage === 4) && <>
+              <rect x="0" y="0" width="300" height="250" fill="#e8ddd0" />
+              <polygon points="0,180 300,180 300,250 0,250" fill="#a07040" />
+              <rect x="5" y="10" width="110" height="100" rx="5" fill="url(#skyGrad)" />
+              <rect x="5" y="10" width="110" height="100" fill="none" stroke="#a09080" strokeWidth="4" rx="5" />
+              {[65, 130, 195].map(x => <g key={x}><circle cx={x} cy="8" r="8" fill="#e8e0d0" /><circle cx={x} cy="8" r="6" fill="rgba(255,255,248,0.95)" /></g>)}
+              {equipment.bookshelf > 0 && <rect x="210" y="10" width="85" height="145" rx="3" fill="#4a2e10" />}
+              <polygon points="40,155 235,155 248,172 28,172" fill="#5a3e28" />
+              <polygon points="40,155 55,133 248,133 235,155" fill="#6b4f38" />
+              <rect x="85" y="112" width="66" height="44" rx="4" fill="#111" />
+              <rect x="88" y="115" width="60" height="36" fill={equipment.computer > 0 ? "#0d47a1" : "#263238"} />
+              <ellipse cx="150" cy="202" rx="28" ry="12" fill={true ? "#7b241c" : "#515a5a"} />
+              {equipment.plant > 0 && <><rect x="0" y="145" width="30" height="32" rx="5" fill="#b5451b" /><ellipse cx="15" cy="140" rx="18" ry="10" fill="#196f3d" /></>}
+              {equipment.smartphone > 0 && <><rect x="258" y="128" width="38" height="50" rx="4" fill="#1a1a2a" /><rect x="262" y="132" width="30" height="20" rx="3" fill="#c0392b" /></>}
+              {equipment.accounting > 0 && <><rect x="5" y="155" width="35" height="22" rx="4" fill="#5d4e8c" /><rect x="5" y="148" width="8" height="29" rx="3" fill="#6c5ea0" /><rect x="32" y="148" width="8" height="29" rx="3" fill="#6c5ea0" /></>}
+            </>}
+            {(stage === 5 || stage === 6) && <>
+              <rect x="0" y="0" width="300" height="250" fill="#1e2a45" />
+              <rect x="0" y="120" width="300" height="62" fill="#3a2810" />
+              <polygon points="0,182 300,182 300,250 0,250" fill="#2a2a3a" />
+              <rect x="0" y="5" width="130" height="118" fill="url(#nightSky)" />
+              <rect x="0" y="5" width="130" height="118" fill="none" stroke="#c8a060" strokeWidth="4" />
+              {[40, 120, 200, 270].map(x => <g key={x}><circle cx={x} cy="8" r="10" fill="#2a2218" /><circle cx={x} cy="8" r="7" fill="#f0d060" opacity="0.9" /></g>)}
+              {equipment.bookshelf > 0 && <><rect x="208" y="5" width="90" height="118" rx="3" fill="#2a1808" stroke="#c8a060" strokeWidth="2" /></>}
+              <polygon points="28,153 255,153 270,173 13,173" fill="#050508" />
+              <polygon points="28,153 43,130 270,130 255,153" fill="#0a0a10" />
+              <line x1="28" y1="153" x2="255" y2="153" stroke="#c8a060" strokeWidth="1.5" />
+              <line x1="43" y1="130" x2="270" y2="130" stroke="#c8a060" strokeWidth="1.5" />
+              <rect x="65" y="104" width="78" height="50" rx="6" fill="#030305" />
+              <rect x="68" y="107" width="72" height="42" fill={equipment.computer > 0 ? "#040418" : "#0a0a12"} />
+              <ellipse cx="150" cy="205" rx="34" ry="15" fill={true ? "#1a0505" : "#050508"} />
+              {equipment.plant > 0 && <><rect x="0" y="135" width="28" height="48" rx="6" fill="#0a0508" stroke="#c8a060" strokeWidth="1" /></>}
+              {equipment.smartphone > 0 && <><rect x="256" y="112" width="42" height="60" rx="6" fill="#050508" stroke="#c8a060" strokeWidth="1.5" /></>}
+              {equipment.accounting > 0 && <><rect x="0" y="148" width="40" height="32" rx="6" fill="#0a0508" stroke="#c8a060" strokeWidth="1" /></>}
+            </>}
+          </svg>
+        );
+      };
+
+      // ── 캐릭터 선택 화면 ──
+      if (currentScreen === 'character-select' && !gender) {
+        return (
+          <div className="h-screen overflow-hidden flex flex-col items-center justify-center p-4"
+            style={{ background: 'linear-gradient(160deg,#fdf6e3 0%,#fde8c0 40%,#f9c97a 100%)' }}>
+            <div className="text-center mb-6">
+              <div className="text-3xl font-black text-amber-900 mb-1" style={{ textShadow: '2px 2px 0 rgba(255,200,0,0.6)' }}>
+                🏛️ 사회복지사 키우기
+              </div>
+              <div className="text-base font-bold text-amber-700">나만의 사회복지사를 선택하세요!</div>
+            </div>
+            <div className="grid grid-cols-2 gap-5 w-full max-w-sm">
+              <button className="card-male p-4" onClick={() => {
+                setGender('male'); setCurrentScreen('game');
+                if (userId) { const d = { gender: 'male', experience, level, money, clickPower, autoXP, autoMoney, totalClicks, skills, equipment, casesCompleted, lastSaved: Date.now() }; localStorage.setItem(`gameData_${userId}`, JSON.stringify(d)); }
+              }}>
+                <div className="char-bob">
+                  <svg viewBox="0 0 80 110" className="w-full" style={{ height: 140 }}>
+                    <ellipse cx="40" cy="106" rx="18" ry="4" fill="rgba(0,0,0,0.12)" />
+                    <rect x="27" y="78" width="10" height="20" rx="4" fill="#2c3e50" /><rect x="43" y="78" width="10" height="20" rx="4" fill="#2c3e50" />
+                    <rect x="24" y="94" width="14" height="7" rx="3" fill="#1a252f" /><rect x="42" y="94" width="14" height="7" rx="3" fill="#1a252f" />
+                    <rect x="22" y="48" width="36" height="34" rx="6" fill="#3498db" />
+                    <polygon points="36,48 44,48 40,56" fill="white" /><rect x="36" y="48" width="4" height="16" fill="white" />
+                    <polygon points="38,52 42,52 41,68 39,68" fill="#e74c3c" />
+                    <rect x="10" y="50" width="12" height="8" rx="4" fill="#3498db" /><rect x="8" y="56" width="10" height="16" rx="4" fill="#f5cba7" />
+                    <rect x="58" y="50" width="12" height="8" rx="4" fill="#3498db" /><rect x="62" y="56" width="10" height="16" rx="4" fill="#f5cba7" />
+                    <rect x="63" y="66" width="12" height="15" rx="2" fill="white" stroke="#bbb" strokeWidth="1" />
+                    <rect x="34" y="38" width="12" height="12" rx="3" fill="#f5cba7" />
+                    <rect x="24" y="14" width="32" height="30" rx="10" fill="#f5cba7" />
+                    <rect x="20" y="22" width="6" height="10" rx="3" fill="#f5cba7" /><rect x="54" y="22" width="6" height="10" rx="3" fill="#f5cba7" />
+                    <rect x="24" y="10" width="32" height="12" rx="6" fill="#5d3a1a" /><rect x="22" y="14" width="8" height="8" rx="3" fill="#5d3a1a" /><rect x="50" y="14" width="8" height="8" rx="3" fill="#5d3a1a" />
+                    <rect x="29" y="23" width="8" height="3" rx="1.5" fill="#4a2c0a" /><rect x="43" y="23" width="8" height="3" rx="1.5" fill="#4a2c0a" />
+                    <ellipse cx="33" cy="30" rx="4" ry="4.5" fill="white" /><ellipse cx="47" cy="30" rx="4" ry="4.5" fill="white" />
+                    <ellipse cx="33" cy="31" rx="2.5" ry="3" fill="#3d2b1f" /><ellipse cx="47" cy="31" rx="2.5" ry="3" fill="#3d2b1f" />
+                    <path d="M33 38 Q40 44 47 38" stroke="#c0392b" strokeWidth="2" fill="none" strokeLinecap="round" />
+                    <ellipse cx="27" cy="35" rx="4" ry="2.5" fill="rgba(255,150,150,0.35)" /><ellipse cx="53" cy="35" rx="4" ry="2.5" fill="rgba(255,150,150,0.35)" />
+                    <rect x="27" y="26" width="10" height="9" rx="3" fill="none" stroke="#444" strokeWidth="1.5" />
+                    <rect x="43" y="26" width="10" height="9" rx="3" fill="none" stroke="#444" strokeWidth="1.5" />
+                    <line x1="37" y1="30" x2="43" y2="30" stroke="#444" strokeWidth="1.5" />
+                  </svg>
+                </div>
+                <div className="text-center mt-1">
+                  <div className="font-black text-blue-800 text-sm">남자 사회복지사</div>
+                  <div className="text-xs text-blue-600 font-bold mt-0.5">꼼꼼하고 논리적</div>
+                  <div className="mt-2 px-4 py-1.5 rounded-xl font-black text-sm text-white" style={{ background: 'linear-gradient(135deg,#3498db,#1a6aa8)' }}>선택!</div>
+                </div>
+              </button>
+              <button className="card-female p-4" onClick={() => {
+                setGender('female'); setCurrentScreen('game');
+                if (userId) { const d = { gender: 'female', experience, level, money, clickPower, autoXP, autoMoney, totalClicks, skills, equipment, casesCompleted, lastSaved: Date.now() }; localStorage.setItem(`gameData_${userId}`, JSON.stringify(d)); }
+              }}>
+                <div className="char-bob-delay">
+                  <svg viewBox="0 0 80 110" className="w-full" style={{ height: 140 }}>
+                    <ellipse cx="40" cy="106" rx="18" ry="4" fill="rgba(0,0,0,0.12)" />
+                    <polygon points="25,78 55,78 60,100 20,100" fill="#9b59b6" />
+                    <rect x="28" y="96" width="8" height="8" rx="3" fill="#fde8d8" /><rect x="44" y="96" width="8" height="8" rx="3" fill="#fde8d8" />
+                    <ellipse cx="32" cy="104" rx="7" ry="4" fill="#c0392b" /><ellipse cx="48" cy="104" rx="7" ry="4" fill="#c0392b" />
+                    <rect x="22" y="46" width="36" height="34" rx="6" fill="#e91e8c" />
+                    <polygon points="36,46 44,46 42,56 38,56" fill="white" />
+                    <ellipse cx="40" cy="57" rx="5" ry="4" fill="#c0392b" />
+                    <rect x="10" y="48" width="12" height="8" rx="4" fill="#e91e8c" /><rect x="8" y="54" width="10" height="16" rx="4" fill="#fde8d8" />
+                    <rect x="58" y="48" width="12" height="8" rx="4" fill="#e91e8c" /><rect x="62" y="54" width="10" height="16" rx="4" fill="#fde8d8" />
+                    <rect x="62" y="64" width="12" height="16" rx="2" fill="#fff9c4" stroke="#f9a825" strokeWidth="1.5" />
+                    <rect x="34" y="36" width="12" height="12" rx="3" fill="#fde8d8" />
+                    <rect x="24" y="12" width="32" height="30" rx="11" fill="#fde8d8" />
+                    <rect x="20" y="21" width="6" height="10" rx="3" fill="#fde8d8" /><rect x="54" y="21" width="6" height="10" rx="3" fill="#fde8d8" />
+                    <rect x="22" y="8" width="36" height="14" rx="7" fill="#4a2c0a" />
+                    <rect x="18" y="14" width="8" height="28" rx="4" fill="#4a2c0a" /><rect x="54" y="14" width="8" height="28" rx="4" fill="#4a2c0a" />
+                    <path d="M28 22 Q33 19 38 22" stroke="#4a2c0a" strokeWidth="2" fill="none" strokeLinecap="round" />
+                    <path d="M42 22 Q47 19 52 22" stroke="#4a2c0a" strokeWidth="2" fill="none" strokeLinecap="round" />
+                    <ellipse cx="33" cy="28" rx="4" ry="4.5" fill="white" /><ellipse cx="47" cy="28" rx="4" ry="4.5" fill="white" />
+                    <ellipse cx="33" cy="29" rx="2.8" ry="3.2" fill="#2c1810" /><ellipse cx="47" cy="29" rx="2.8" ry="3.2" fill="#2c1810" />
+                    <path d="M32 36 Q40 43 48 36" stroke="#c0392b" strokeWidth="2" fill="none" strokeLinecap="round" />
+                    <ellipse cx="27" cy="33" rx="4.5" ry="3" fill="rgba(255,120,120,0.4)" /><ellipse cx="53" cy="33" rx="4.5" ry="3" fill="rgba(255,120,120,0.4)" />
+                    <ellipse cx="52" cy="12" rx="4" ry="3" fill="#e74c3c" />
+                  </svg>
+                </div>
+                <div className="text-center mt-1">
+                  <div className="font-black text-pink-800 text-sm">여자 사회복지사</div>
+                  <div className="text-xs text-pink-600 font-bold mt-0.5">따뜻하고 공감능력 탁월</div>
+                  <div className="mt-2 px-4 py-1.5 rounded-xl font-black text-sm text-white" style={{ background: 'linear-gradient(135deg,#e91e8c,#a01060)' }}>선택!</div>
+                </div>
+              </button>
+            </div>
+            <div className="mt-5 text-center">
+              <div className="text-xs text-amber-700 font-bold">✨ 선택 후 레벨업하며 캐릭터가 성장합니다</div>
+            </div>
+          </div>
+        );
+      }
+
+      const stageBg = [
+        'linear-gradient(180deg,#8B7355 0%,#6B5335 100%)',
+        'linear-gradient(180deg,#607d8b 0%,#455a64 100%)',
+        'linear-gradient(180deg,#5c8a7a 0%,#3d6b5c 100%)',
+        'linear-gradient(180deg,#8c7a4a 0%,#6b5c30 100%)',
+        'linear-gradient(180deg,#5a7a9a 0%,#3a5a7a 100%)',
+        'linear-gradient(180deg,#1a1a2a 0%,#0a0a15 100%)',
+        'linear-gradient(180deg,#0a0a18 0%,#050510 100%)',
+      ];
+
+      // ── 메인 게임 화면 ──
+      return (
+        <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: stageBg[getOfficeStage()], transition: 'background 2s ease', fontFamily: "'Noto Sans KR', sans-serif" }}>
+
+          {/* 미니게임 모달 */}
+          {activeMinigame && (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '16px' }}>
+              <div style={{ background: 'white', borderRadius: '16px', padding: '20px', maxWidth: '420px', width: '100%', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
+                <button onClick={closeMinigame} style={{ position: 'absolute', top: '12px', right: '12px', background: '#f3f4f6', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', fontSize: '16px' }}>✕</button>
+                {activeMinigame === 'counseling' && minigameData && (
+                  <>
+                    <h2 style={{ fontSize: '18px', fontWeight: '900', color: '#1f2937', marginBottom: '12px' }}>💬 상담 시나리오</h2>
+                    <p style={{ fontSize: '14px', marginBottom: '16px', color: '#374151', lineHeight: '1.5', background: '#fef3c7', padding: '10px', borderRadius: '8px', border: '2px solid #fcd34d' }}>{minigameData.question}</p>
+                    {!minigameData.result ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {minigameData.options.map((option, index) => (
+                          <button key={index} onClick={() => answerMinigame(option)}
+                            style={{ padding: '10px 12px', background: 'linear-gradient(135deg,#3b82f6,#4f46e5)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', textAlign: 'left', fontSize: '15px' }}>
+                            {option.text}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ padding: '16px', borderRadius: '8px', background: minigameData.result.success ? '#dcfce7' : '#fee2e2' }}>
+                        <div style={{ fontSize: '18px', fontWeight: '900', marginBottom: '8px', color: minigameData.result.success ? '#15803d' : '#b91c1c' }}>{minigameData.result.success ? '✓ 정답!' : '✗ 오답'}</div>
+                        <p style={{ color: '#374151', marginBottom: '12px', fontSize: '15px' }}>{minigameData.result.message}</p>
+                        {minigameData.result.reward > 0 && <div style={{ fontSize: '16px', fontWeight: '700', color: '#15803d' }}>+{Math.floor(minigameData.result.reward)}원</div>}
+                        <button onClick={closeMinigame} style={{ marginTop: '12px', width: '100%', padding: '10px', background: '#1f2937', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>닫기</button>
+                      </div>
+                    )}
+                  </>
+                )}
+                {activeMinigame === 'typing' && minigameData && (
+                  <>
+                    <h2 style={{ fontSize: '18px', fontWeight: '900', color: '#1f2937', marginBottom: '8px' }}>📄 문서 작성</h2>
+                    <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '10px' }}>아래 문서명을 정확하게 입력하세요</p>
+                    {!minigameData.result ? (
+                      <>
+                        <div style={{ background: '#eff6ff', border: '3px solid #93c5fd', borderRadius: '8px', padding: '12px', marginBottom: '12px', textAlign: 'center' }}>
+                          <p style={{ fontSize: '18px', fontWeight: '900', color: '#1e40af' }}>{minigameData.hint}</p>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: '700', color: '#4b5563' }}>남은 시간</span>
+                          <span style={{ fontSize: '20px', fontWeight: '900', color: minigameData.timeLeft <= 5 ? '#dc2626' : '#2563eb' }}>{minigameData.timeLeft}초</span>
+                        </div>
+                        <div style={{ height: '6px', background: '#e5e7eb', borderRadius: '3px', marginBottom: '12px' }}>
+                          <div style={{ height: '100%', background: 'linear-gradient(to right,#3b82f6,#22c55e)', borderRadius: '3px', width: `${(minigameData.timeLeft / minigameData.maxTime) * 100}%`, transition: 'width 1s linear' }} />
+                        </div>
+                        {minigameData.timeLeft > 0 ? (
+                          <>
+                            <input type="text" value={typingInput} onChange={(e) => setTypingInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') answerMinigame() }}
+                              style={{ width: '100%', padding: '10px', border: '3px solid #d1d5db', borderRadius: '8px', fontSize: '17px', marginBottom: '10px', outline: 'none' }}
+                              placeholder="여기에 입력하세요..." autoFocus />
+                            <button onClick={() => answerMinigame()} style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg,#22c55e,#059669)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '900', fontSize: '16px', cursor: 'pointer' }}>제출</button>
+                          </>
+                        ) : (
+                          <div style={{ textAlign: 'center', color: '#dc2626', fontWeight: '700', fontSize: '16px', padding: '16px', background: '#fee2e2', borderRadius: '8px' }}>
+                            ⏱ 시간 초과!
+                            <button onClick={closeMinigame} style={{ display: 'block', marginTop: '10px', width: '100%', padding: '10px', background: '#1f2937', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>닫기</button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div style={{ padding: '16px', borderRadius: '8px', background: minigameData.result.success ? '#dcfce7' : '#fee2e2' }}>
+                        <div style={{ fontSize: '18px', fontWeight: '900', marginBottom: '8px', color: minigameData.result.success ? '#15803d' : '#b91c1c' }}>{minigameData.result.success ? '✓ 완료!' : '✗ 실패'}</div>
+                        <p style={{ color: '#374151', marginBottom: '8px', fontSize: '15px' }}>{minigameData.result.message}</p>
+                        {minigameData.result.reward > 0 && <div style={{ fontSize: '17px', fontWeight: '700', color: '#15803d' }}>+{Math.floor(minigameData.result.reward)}원</div>}
+                        <button onClick={closeMinigame} style={{ marginTop: '10px', width: '100%', padding: '10px', background: '#1f2937', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>닫기</button>
+                      </div>
+                    )}
+                  </>
+                )}
+                {activeMinigame === 'quiz' && minigameData && (
+                  <>
+                    <h2 style={{ fontSize: '17px', fontWeight: '900', color: '#1f2937', marginBottom: '10px' }}>🧮 복지 상식 퀴즈</h2>
+                    <p style={{ fontSize: '14px', marginBottom: '14px', color: '#374151', background: '#fefce8', padding: '10px', borderRadius: '8px', border: '2px solid #fde047', lineHeight: '1.6', whiteSpace: 'pre-line', textAlign: 'center', fontWeight: '700' }}>{minigameData.question}</p>
+                    {!minigameData.result ? (
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                        {minigameData.options.map((opt, idx) => (
+                          <button key={idx} onClick={() => answerMinigame(idx)}
+                            style={{ padding: '14px 8px', background: `linear-gradient(135deg,${['#6366f1', '#0ea5e9', '#22c55e', '#f59e0b'][idx]},${['#4f46e5', '#0284c7', '#16a34a', '#d97706'][idx]})`, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '900', fontSize: '14px', cursor: 'pointer', boxShadow: '0 3px 6px rgba(0,0,0,0.2)' }}>
+                            {['①', '②', '③', '④'][idx]} {opt}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ padding: '16px', borderRadius: '8px', background: minigameData.result.success ? '#dcfce7' : '#fee2e2' }}>
+                        <div style={{ fontSize: '22px', fontWeight: '900', marginBottom: '6px', color: minigameData.result.success ? '#15803d' : '#b91c1c', textAlign: 'center' }}>{minigameData.result.success ? '✓ 정답!' : '✗ 오답'}</div>
+                        <p style={{ color: '#374151', marginBottom: '8px', fontSize: '15px', textAlign: 'center' }}>{minigameData.result.message}</p>
+                        {minigameData.result.reward > 0 && <div style={{ fontSize: '17px', fontWeight: '700', color: '#15803d', textAlign: 'center' }}>+{minigameData.result.reward}원 · +{minigameData.result.reward}xp</div>}
+                        <button onClick={closeMinigame} style={{ marginTop: '12px', width: '100%', padding: '10px', background: '#1f2937', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>닫기</button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 사무실 승급 알림 */}
+          {showOfficeUpgrade && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+              <div style={{ background: 'linear-gradient(135deg,#FFD700,#FF8C00)', border: '4px solid #8B4513', borderRadius: '20px', padding: '20px 32px', boxShadow: '0 0 40px rgba(255,215,0,0.8)', animation: 'officeUpgrade 3.5s ease-out forwards', textAlign: 'center' }}>
+                <div style={{ fontSize: '36px', marginBottom: '8px' }}>🏢✨</div>
+                <div style={{ fontSize: '20px', fontWeight: '900', color: '#4a2000', marginBottom: '4px' }}>사무실 업그레이드!</div>
+                <div style={{ fontSize: '15px', fontWeight: '700', color: '#6b3000' }}>
+                  {['😓 허름한 공간', '🏢 기본 사무실', '📋 정돈된 사무실', '👔 팀장 사무실', '🏛️ 고급 사무실', '🌆 부장 집무실', '👑 센터장 임원실'][getOfficeStage()]}으로 승급!
+                </div>
+              </div>
+              <style>{`@keyframes officeUpgrade{0%{opacity:0;transform:scale(0.5) rotate(-5deg)}15%{opacity:1;transform:scale(1.1) rotate(2deg)}25%{transform:scale(1) rotate(0)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(0.8) translateY(-30px)}}`}</style>
+            </div>
+          )}
+
+          {/* 저장 표시 */}
+          {showSaveIndicator && (
+            <div style={{ position: 'fixed', top: '60px', right: '12px', background: '#22c55e', color: 'white', padding: '6px 14px', borderRadius: '8px', fontWeight: '700', zIndex: 50, fontSize: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>✓ 저장됨</div>
+          )}
+
+          {/* ─── 헤더 ─── */}
+          <div style={{ flexShrink: 0, margin: '4px 4px 0 4px' }}>
+            <div className="gold-frame" style={{ padding: '5px 8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <span style={{ fontWeight: '900', color: '#78350f', fontSize: '13px' }}>🏛️ {currentRank.name}</span>
+                  <span style={{ fontWeight: '900', color: '#15803d', fontSize: '13px' }}>💰 {Math.floor(money).toLocaleString()}원</span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span style={{ fontWeight: '900', color: '#92400e', fontSize: '13px' }}>LVL {level}</span>
+                  <button onClick={saveGameData} style={{ fontSize: '12px', fontWeight: '700', color: '#1d4ed8', background: '#dbeafe', borderRadius: '4px', padding: '2px 6px', border: '1px solid #93c5fd', cursor: 'pointer' }}>저장</button>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: '#1e3a8a' }}>{Math.floor(experience).toLocaleString()} / {(level * 1000).toLocaleString()} xp</span>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: '#15803d' }}>남은 {Math.max(0, level * 1000 - Math.floor(experience)).toLocaleString()} xp</span>
+              </div>
+              <div style={{ height: '8px', background: 'linear-gradient(to right,#1e40af,#1e3a8a)', borderRadius: '4px', overflow: 'hidden', border: '1px solid #172554' }}>
+                <div style={{ height: '100%', background: 'linear-gradient(to right,#4ade80,#10b981)', width: `${expProgress}%`, transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* ─── 메인 컨텐츠 ─── */}
+          <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', padding: '4px', paddingBottom: '46px', gap: '4px', overflow: 'hidden' }}>
+
+            {/* ════ 게임 화면 ════ */}
+            {currentScreen === 'game' && (
+              <>
+                {/* 상단: 사무실 + 캐릭터 + 버튼 */}
+                <div className="gold-frame" style={{ flexShrink: 0, padding: '6px', background: 'linear-gradient(135deg,#F5E6D3 0%,#D7CCC8 100%)', position: 'relative' }}>
+                  {/* 버프/디버프 배너 */}
+                  {pipetTime > 0 && (
+                    <div style={{ position: 'absolute', top: '4px', left: '4px', zIndex: 20, background: 'linear-gradient(135deg,#f59e0b,#d97706)', border: '2px solid #fbbf24', borderRadius: '8px', padding: '3px 7px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '900', color: 'white' }}>🔥 피펫타임 ×2 ({pipetTime}초)</div>
+                    </div>
+                  )}
+                  {mentalCrash > 0 && pipetTime === 0 && (
+                    <div style={{ position: 'absolute', top: '4px', left: '4px', zIndex: 20, background: 'linear-gradient(135deg,#ef4444,#b91c1c)', border: '2px solid #fca5a5', borderRadius: '8px', padding: '3px 7px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '900', color: 'white' }}>💔 멘탈바사삭 절반 ({mentalCrash}초)</div>
+                    </div>
+                  )}
+                  {currentCase && pipetTime === 0 && mentalCrash === 0 && (
+                    <div style={{ position: 'absolute', top: '4px', left: '4px', zIndex: 20, background: `linear-gradient(135deg, #f472b6, #db2777)`, border: '2px solid rgba(255,255,255,0.7)', borderRadius: '8px', padding: '3px 7px', maxWidth: '55%' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '900', color: 'white' }}>📢 긴급! {currentCase.icon} {currentCase.name}</div>
+                      <div style={{ height: '3px', background: 'rgba(0,0,0,0.3)', borderRadius: '2px', marginTop: '2px' }}>
+                        <div style={{ height: '100%', borderRadius: '2px', background: caseTimeLeft > 8 ? '#4ade80' : caseTimeLeft > 4 ? '#facc15' : '#ef4444', width: `${(caseTimeLeft / 15) * 100}%`, transition: 'width 1s linear' }} />
+                      </div>
+                      <div style={{ fontSize: '10px', fontWeight: '900', color: 'white', textAlign: 'right' }}>{caseTimeLeft}초</div>
+                    </div>
+                  )}
+                  {showCaseResult === 'success' && (
+                    <div style={{ position: 'absolute', inset: 0, zIndex: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(34,197,94,0.3)', borderRadius: '8px', pointerEvents: 'none' }}>
+                      <div style={{ fontWeight: '900', color: 'white', fontSize: '17px', textAlign: 'center', textShadow: '0 0 10px #16a34a' }}>🎉 케이스 해결!<br /><span style={{ fontSize: '12px' }}>피펫타임 발동!</span></div>
+                    </div>
+                  )}
+                  {showCaseResult === 'fail' && (
+                    <div style={{ position: 'absolute', inset: 0, zIndex: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.3)', borderRadius: '8px', pointerEvents: 'none' }}>
+                      <div style={{ fontWeight: '900', color: 'white', fontSize: '17px', textAlign: 'center', textShadow: '0 0 10px #b91c1c' }}>💔 케이스 실패...<br /><span style={{ fontSize: '12px' }}>멘탈 바사삭 20초</span></div>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                    {/* 사무실 미리보기 */}
+                    <div style={{ position: 'relative', width: 80, height: 60, flexShrink: 0 }}>
+                      {floatingNumbers.map(num => (
+                        <div key={num.id} style={{ position: 'absolute', left: '50%', top: '10%', marginLeft: num.x, fontWeight: '900', fontSize: '13px', color: num.color || '#16a34a', whiteSpace: 'nowrap', zIndex: 10, textShadow: '1px 1px 2px rgba(0,0,0,0.5)', animation: 'float-up 1s ease-out forwards', pointerEvents: 'none' }}>
+                          {num.value}
+                        </div>
+                      ))}
+                      <div style={{ transform: 'scale(0.267)', transformOrigin: 'top left', width: 300, height: 250 }}>
+                        {renderOffice()}
+                      </div>
+                    </div>
+                    {/* 캐릭터 + 버튼 */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
+                      <div style={{ width: 38, height: 46 }}>
+                        {gender === 'male' && (
+                          <svg viewBox="0 0 80 110" style={{ width: '100%', height: '100%' }}>
+                            <rect x="27" y="78" width="9" height="18" rx="3" fill="#2c3e50" /><rect x="44" y="78" width="9" height="18" rx="3" fill="#2c3e50" />
+                            <rect x="24" y="93" width="13" height="6" rx="2" fill="#1a252f" /><rect x="43" y="93" width="13" height="6" rx="2" fill="#1a252f" />
+                            <rect x="22" y="48" width="36" height="33" rx="5" fill="#3498db" />
+                            <polygon points="36,48 44,48 40,55" fill="white" /><polygon points="38,52 42,52 41,64 39,64" fill="#e74c3c" />
+                            <rect x="10" y="50" width="12" height="7" rx="3" fill="#3498db" /><rect x="8" y="55" width="9" height="14" rx="3" fill="#f5cba7" />
+                            <rect x="58" y="50" width="12" height="7" rx="3" fill="#3498db" /><rect x="63" y="55" width="9" height="14" rx="3" fill="#f5cba7" />
+                            <rect x="34" y="38" width="12" height="12" rx="3" fill="#f5cba7" />
+                            <rect x="24" y="14" width="32" height="28" rx="9" fill="#f5cba7" />
+                            <rect x="24" y="10" width="32" height="11" rx="5" fill="#5d3a1a" />
+                            <ellipse cx="33" cy="28" rx="3.5" ry="4" fill="white" /><ellipse cx="47" cy="28" rx="3.5" ry="4" fill="white" />
+                            <ellipse cx="33" cy="29" rx="2.2" ry="2.6" fill="#3d2b1f" /><ellipse cx="47" cy="29" rx="2.2" ry="2.6" fill="#3d2b1f" />
+                            <path d="M32 36 Q40 42 48 36" stroke="#c0392b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                            <ellipse cx="27" cy="33" rx="3.5" ry="2" fill="rgba(255,150,150,0.35)" /><ellipse cx="53" cy="33" rx="3.5" ry="2" fill="rgba(255,150,150,0.35)" />
+                            <rect x="27" y="25" width="9" height="8" rx="2.5" fill="none" stroke="#555" strokeWidth="1.2" />
+                            <rect x="44" y="25" width="9" height="8" rx="2.5" fill="none" stroke="#555" strokeWidth="1.2" />
+                            <line x1="36" y1="29" x2="44" y2="29" stroke="#555" strokeWidth="1.2" />
+                          </svg>
+                        )}
+                        {gender === 'female' && (
+                          <svg viewBox="0 0 80 110" style={{ width: '100%', height: '100%' }}>
+                            <polygon points="25,78 55,78 59,98 21,98" fill="#9b59b6" />
+                            <rect x="29" y="94" width="7" height="8" rx="2" fill="#fde8d8" /><rect x="44" y="94" width="7" height="8" rx="2" fill="#fde8d8" />
+                            <ellipse cx="32" cy="103" rx="6" ry="3.5" fill="#c0392b" /><ellipse cx="48" cy="103" rx="6" ry="3.5" fill="#c0392b" />
+                            <rect x="22" y="46" width="36" height="33" rx="5" fill="#e91e8c" />
+                            <polygon points="36,46 44,46 42,54 38,54" fill="white" /><ellipse cx="40" cy="55" rx="4" ry="3" fill="#c0392b" />
+                            <rect x="10" y="48" width="12" height="7" rx="3" fill="#e91e8c" /><rect x="8" y="53" width="9" height="14" rx="3" fill="#fde8d8" />
+                            <rect x="58" y="48" width="12" height="7" rx="3" fill="#e91e8c" /><rect x="63" y="53" width="9" height="14" rx="3" fill="#fde8d8" />
+                            <rect x="34" y="36" width="12" height="12" rx="3" fill="#fde8d8" />
+                            <rect x="24" y="12" width="32" height="28" rx="10" fill="#fde8d8" />
+                            <rect x="22" y="8" width="36" height="12" rx="6" fill="#4a2c0a" />
+                            <rect x="18" y="13" width="7" height="25" rx="3.5" fill="#4a2c0a" /><rect x="55" y="13" width="7" height="25" rx="3.5" fill="#4a2c0a" />
+                            <path d="M27 22 Q33 18 38 22" stroke="#4a2c0a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                            <path d="M42 22 Q47 18 53 22" stroke="#4a2c0a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                            <ellipse cx="33" cy="27" rx="3.5" ry="4" fill="white" /><ellipse cx="47" cy="27" rx="3.5" ry="4" fill="white" />
+                            <ellipse cx="33" cy="28" rx="2.5" ry="2.8" fill="#2c1810" /><ellipse cx="47" cy="28" rx="2.5" ry="2.8" fill="#2c1810" />
+                            <path d="M32 35 Q40 41 48 35" stroke="#c0392b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                            <ellipse cx="27" cy="32" rx="4" ry="2.5" fill="rgba(255,120,120,0.4)" /><ellipse cx="53" cy="32" rx="4" ry="2.5" fill="rgba(255,120,120,0.4)" />
+                            <ellipse cx="52" cy="11" rx="3.5" ry="2.5" fill="#e74c3c" />
+                          </svg>
+                        )}
+                      </div>
+                      <button onClick={handleWork} className={`work-button ${clickAnimation ? 'scale-95' : ''}`} style={{ padding: '4px 14px' }}>
+                        <span style={{ fontWeight: '900', color: '#78350f', fontSize: '15px', textShadow: '1px 1px 0 rgba(255,255,255,0.5)' }}>업무</span>
+                      </button>
+                    </div>
+                    {/* 스탯: 2열 그리드 */}
+                    <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', minWidth: 0 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', background: '#dcfce7', border: '1px solid #4ade80', borderRadius: '4px', padding: '2px 4px' }}>
+                        <span style={{ fontSize: '9px', fontWeight: '700', color: '#15803d' }}>🖱 클릭XP</span>
+                        <span style={{ fontSize: '10px', fontWeight: '900', color: '#15803d' }}>+{Math.floor(clickPower)}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', background: '#fef9c3', border: '1px solid #facc15', borderRadius: '4px', padding: '2px 4px' }}>
+                        <span style={{ fontSize: '9px', fontWeight: '700', color: '#a16207' }}>💰 클릭돈</span>
+                        <span style={{ fontSize: '10px', fontWeight: '900', color: '#a16207' }}>+{Math.floor(clickMoneyPower)}원</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', background: autoXP > 0 ? '#dbeafe' : '#e0e7ff', border: `1px solid ${autoXP > 0 ? '#60a5fa' : '#a5b4fc'}`, borderRadius: '4px', padding: '2px 4px', opacity: autoXP > 0 ? 1 : 0.45 }}>
+                        <span style={{ fontSize: '9px', fontWeight: '700', color: '#1d4ed8' }}>⭐ 자동XP</span>
+                        <span style={{ fontSize: '10px', fontWeight: '900', color: '#1d4ed8' }}>{autoXP > 0 ? `+${autoXP}/초` : '-'}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', background: autoMoney > 0 ? '#fef3c7' : '#fef9c3', border: `1px solid ${autoMoney > 0 ? '#fbbf24' : '#fde68a'}`, borderRadius: '4px', padding: '2px 4px', opacity: autoMoney > 0 ? 1 : 0.45 }}>
+                        <span style={{ fontSize: '9px', fontWeight: '700', color: '#92400e' }}>💴 자동돈</span>
+                        <span style={{ fontSize: '10px', fontWeight: '900', color: '#92400e' }}>{autoMoney > 0 ? `+${autoMoney}원/초` : '-'}</span>
+                      </div>
+                      {/* 케이스 5개 - 2열 */}
+                      {caseTypes.map(ct => (
+                        <div key={ct.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '1px 4px', background: 'rgba(255,255,255,0.3)', borderRadius: '3px' }}>
+                          <span style={{ fontSize: '9px', fontWeight: '700', color: '#78350f' }}>{ct.icon} {ct.name}</span>
+                          <span style={{ fontSize: '10px', fontWeight: '900', color: '#92400e' }}>{casesCompleted[ct.id]}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 미니게임 */}
+                <div className="gold-frame" style={{ flexShrink: 0, padding: '5px 8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '900', color: '#78350f', flexShrink: 0 }}>🎮 미니게임</span>
+                    <div style={{ display: 'flex', gap: '4px', flex: 1 }}>
+                      {[
+                        { type: 'counseling', icon: '💬', label: '상담', bg: 'linear-gradient(135deg,#a855f7,#db2777)' },
+                        { type: 'typing', icon: '⌨️', label: '문서', bg: 'linear-gradient(135deg,#3b82f6,#4f46e5)' },
+                        { type: 'quiz', icon: '🧮', label: '계산', bg: 'linear-gradient(135deg,#22c55e,#059669)' },
+                      ].map(({ type, icon, label, bg }) => (
+                        <button key={type} onClick={() => startMinigame(type)} disabled={minigameCooldowns[type] > 0}
+                          style={{ flex: 1, background: minigameCooldowns[type] > 0 ? '#9ca3af' : bg, color: 'white', border: 'none', borderRadius: '6px', padding: '4px 2px', cursor: minigameCooldowns[type] > 0 ? 'not-allowed' : 'pointer', position: 'relative', fontSize: '11px', fontWeight: '700' }}>
+                          <div style={{ fontSize: '15px' }}>{icon}</div>
+                          <div>{minigameCooldowns[type] > 0 ? `${minigameCooldowns[type]}s` : label}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 스킬/장비 업그레이드 - flex:1 로 나머지 공간 채움 */}
+                <div className="gold-frame" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', padding: '5px' }}>
+                  {/* 탭 */}
+                  <div style={{ display: 'flex', gap: '4px', flexShrink: 0, marginBottom: '4px' }}>
+                    <button onClick={() => setUpgradeTab('skill')}
+                      style={{
+                        flex: 1, padding: '3px', fontSize: '12px', fontWeight: '900', border: '2px solid', borderRadius: '7px', cursor: 'pointer',
+                        background: upgradeTab === 'skill' ? 'linear-gradient(135deg,#22c55e,#059669)' : '#e5e7eb',
+                        borderColor: upgradeTab === 'skill' ? '#15803d' : '#d1d5db',
+                        color: upgradeTab === 'skill' ? 'white' : '#374151'
+                      }}>
+                      ❤️ 스킬 (클릭)
+                    </button>
+                    <button onClick={() => setUpgradeTab('equip')}
+                      style={{
+                        flex: 1, padding: '3px', fontSize: '12px', fontWeight: '900', border: '2px solid', borderRadius: '7px', cursor: 'pointer',
+                        background: upgradeTab === 'equip' ? 'linear-gradient(135deg,#3b82f6,#4f46e5)' : '#e5e7eb',
+                        borderColor: upgradeTab === 'equip' ? '#1d4ed8' : '#d1d5db',
+                        color: upgradeTab === 'equip' ? 'white' : '#374151'
+                      }}>
+                      💼 장비 (자동)
+                    </button>
+                  </div>
+                  {/* 카드 목록 - 내부 스크롤 */}
+                  <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                      {(upgradeTab === 'skill' ? skillsData : equipmentData).map(item => {
+                        const currentLevel = upgradeTab === 'skill' ? skills[item.id] : equipment[item.id];
+                        const cost = item.cost(currentLevel);
+                        const canAfford = money >= cost;
+                        const isSkill = upgradeTab === 'skill';
+                        // stat badge config
+                        const statBadge = item.statType === 'clickXP'
+                          ? { label: `클릭XP +${item.statValue}`, color: '#bbf7d0', bg: 'rgba(22,163,74,0.35)' }
+                          : item.statType === 'clickMoney'
+                            ? { label: `클릭돈 +${item.statValue}원`, color: '#fef08a', bg: 'rgba(146,64,14,0.35)' }
+                            : item.statType === 'autoXP'
+                              ? { label: `자동XP +${item.statValue}/초`, color: '#bfdbfe', bg: 'rgba(29,78,216,0.35)' }
+                              : { label: `자동돈 +${item.statValue}원/초`, color: '#fde68a', bg: 'rgba(120,53,15,0.35)' };
+                        return (
+                          <button key={item.id}
+                            onClick={() => isSkill ? upgradeSkill(item.id) : upgradeEquipment(item.id)}
+                            disabled={!canAfford}
+                            style={{
+                              background: canAfford ? (isSkill ? 'linear-gradient(135deg,#22c55e,#059669)' : 'linear-gradient(135deg,#3b82f6,#4f46e5)') : '#d1d5db',
+                              border: `2px solid ${canAfford ? (isSkill ? '#15803d' : '#1d4ed8') : '#9ca3af'}`,
+                              borderRadius: '8px', padding: '5px 6px', cursor: canAfford ? 'pointer' : 'not-allowed',
+                              opacity: canAfford ? 1 : 0.6, textAlign: 'left'
+                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '3px' }}>
+                              <span style={{ fontSize: '17px' }}>{item.icon}</span>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: '11px', fontWeight: '900', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
+                                <div style={{ fontSize: '10px', fontWeight: '700', color: '#fef08a' }}>Lv.{currentLevel}→{currentLevel + 1}</div>
+                              </div>
+                              {canAfford && <span style={{ fontSize: '10px', fontWeight: '900', color: 'white', background: 'rgba(0,0,0,0.2)', borderRadius: '3px', padding: '1px 3px' }}>TAP</span>}
+                            </div>
+                            {/* stat badge */}
+                            <div style={{ display: 'inline-block', background: statBadge.bg, borderRadius: '4px', padding: '1px 5px', marginBottom: '2px' }}>
+                              <span style={{ fontSize: '10px', fontWeight: '900', color: statBadge.color }}>▲ {statBadge.label}</span>
+                            </div>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#fde047' }}>💰 {cost.toLocaleString()}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ════ 랭킹 화면 ════ */}
+            {currentScreen === 'ranking' && (
+              <div className="gold-frame" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', padding: '10px' }}>
+                <h2 style={{ fontSize: '17px', fontWeight: '900', color: '#78350f', marginBottom: '10px', flexShrink: 0 }}>🏆 명예의 전당 (TOP 10)</h2>
+                {/* 내 정보 배너 */}
+                {userId && (
+                  <div style={{ background: 'linear-gradient(135deg,#fef3c7,#fde68a)', border: '2px solid #f59e0b', borderRadius: '8px', padding: '6px 10px', marginBottom: '8px', flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <div style={{ fontSize: '12px', fontWeight: '900', color: '#78350f' }}>
+                        {gender === 'female' ? '👩' : '👨'} {nickname || '이름 없는 복지사'} (나)
+                      </div>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#92400e' }}>
+                        {nickname ? `비밀노트 ID: ${userId.slice(0, 8)}...` : `게임 ID: ${userId.slice(0, 10)}...`}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '14px', fontWeight: '900', color: '#78350f' }}>Lv.{level}</div>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#92400e' }}>{totalClicks.toLocaleString()}클릭</div>
+                    </div>
+                  </div>
+                )}
+                <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+                  {rankingLoading ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                      <div style={{ fontSize: '32px', marginBottom: '8px' }}>⏳</div>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#92400e' }}>랭킹 불러오는 중...</div>
+                    </div>
+                  ) : rankingData.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                      <div style={{ fontSize: '32px', marginBottom: '8px' }}>🌱</div>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#92400e' }}>아직 랭킹 데이터가 없습니다.<br />저장하면 랭킹에 등록됩니다!</div>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {rankingData.map((entry, idx) => {
+                        const isMe = entry.user_id === userId;
+                        const medals = ['🥇', '🥈', '🥉'];
+                        const rankLabel = idx < 3 ? medals[idx] : `${idx + 1}위`;
+                        const rankInfo = [...ranks].reverse().find(r => entry.level >= r.minLevel) || ranks[0];
+                        return (
+                          <div key={entry.user_id || idx}
+                            style={{
+                              borderRadius: '10px', padding: '8px 10px', border: '2px solid', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                              background: isMe ? 'linear-gradient(135deg,#fef08a,#fbbf24)' : 'linear-gradient(135deg,#fef3c7,#fed7aa)',
+                              borderColor: isMe ? '#d97706' : '#fcd34d'
+                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <span style={{ fontSize: '18px', fontWeight: '900' }}>{rankLabel}</span>
+                              <span style={{ fontSize: '16px' }}>{entry.gender === 'female' ? '👩' : '👨'}</span>
+                              <div>
+                                <div style={{ fontSize: '12px', fontWeight: '900', color: '#78350f' }}>
+                                  {entry.nickname || '이름 없는 복지사'} {isMe ? '(나)' : ''}
+                                </div>
+                                <div style={{ fontSize: '12px', fontWeight: '700', color: '#92400e' }}>
+                                  {rankInfo.name} · 케이스 {entry.cases_total}건
+                                </div>
+                              </div>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                              <div style={{ fontSize: '16px', fontWeight: '900', color: '#78350f' }}>Lv.{entry.level}</div>
+                              <div style={{ fontSize: '11px', fontWeight: '700', color: '#92400e' }}>{entry.total_clicks?.toLocaleString()}클릭</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div style={{ marginTop: '8px', padding: '6px', background: '#fef3c7', borderRadius: '8px', border: '2px solid #fcd34d', flexShrink: 0, textAlign: 'center' }}>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#92400e' }}>💡 저장 시 자동 랭킹 업데이트 · 비밀노트 닉네임 연동</div>
+                </div>
+              </div>
+            )}
+
+            {/* ════ 통계 화면 ════ */}
+            {currentScreen === 'stats' && (
+              <div className="gold-frame" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', padding: '10px' }}>
+                <h2 style={{ fontSize: '17px', fontWeight: '900', color: '#78350f', marginBottom: '8px', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  📊 내 통계
+                </h2>
+                <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', gap: '6px', overflowY: 'auto' }}>
+                  {[
+                    { label: '직급', value: currentRank.name, bg: '#eff6ff', border: '#93c5fd', color: '#1d4ed8', icon: '🏛️' },
+                    { label: '현재 레벨', value: level, bg: '#f3e8ff', border: '#c084fc', color: '#7e22ce', icon: '⭐' },
+                    { label: '보유 자금', value: `${Math.floor(money).toLocaleString()}원`, bg: '#fef9c3', border: '#facc15', color: '#a16207', icon: '💰' },
+                    { label: '클릭XP', value: `+${Math.floor(clickPower)} xp`, bg: '#dcfce7', border: '#4ade80', color: '#15803d', icon: '🖱' },
+                    { label: '클릭돈', value: `+${Math.floor(clickMoneyPower)}원`, bg: '#fef9c3', border: '#facc15', color: '#a16207', icon: '💰' },
+                    { label: '자동 XP', value: autoXP > 0 ? `+${autoXP} xp/초` : '+0 xp/초', bg: '#dbeafe', border: '#60a5fa', color: '#1d4ed8', icon: '⭐' },
+                    { label: '자동 돈', value: autoMoney > 0 ? `+${autoMoney}원/초` : '+0원/초', bg: '#fef9c3', border: '#fbbf24', color: '#a16207', icon: '💴' },
+                    { label: '총 클릭수', value: totalClicks.toLocaleString(), bg: '#e0e7ff', border: '#a5b4fc', color: '#4338ca', icon: '👆' },
+                    { label: '완료 케이스', value: `${Object.values(casesCompleted).reduce((a, b) => a + b, 0)}건`, bg: '#fce7f3', border: '#f9a8d4', color: '#9d174d', icon: '📋' },
+                  ].map(({ label, value, bg, border, color, icon }) => (
+                    <div key={label} style={{ background: bg, border: `2px solid ${border}`, borderRadius: '8px', padding: '7px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color }}>{icon} {label}</span>
+                      <span style={{ fontSize: '14px', fontWeight: '900', color }}>{value}</span>
+                    </div>
+                  ))}
+                  {/* 케이스 상세 */}
+                  <div style={{ background: '#fff7ed', border: '2px solid #fdba74', borderRadius: '8px', padding: '7px 10px', flexShrink: 0 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '900', color: '#c2410c', marginBottom: '4px' }}>📊 케이스 상세</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                      {caseTypes.map(ct => (
+                        <div key={ct.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 4px', background: 'rgba(255,255,255,0.6)', borderRadius: '4px' }}>
+                          <span style={{ fontSize: '11px', fontWeight: '700', color: '#92400e' }}>{ct.icon} {ct.name}</span>
+                          <span style={{ fontSize: '11px', fontWeight: '900', color: '#78350f' }}>{casesCompleted[ct.id]}건</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {/* 비밀노트 연동 정보 */}
+                  <div style={{ background: '#f0fdf4', border: '2px solid #4ade80', borderRadius: '8px', padding: '7px 10px', flexShrink: 0 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '900', color: '#15803d', marginBottom: '2px' }}>🔗 비밀노트 연동</div>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#166534' }}>닉네임: {nickname || '(미설정 - 비밀노트에서 설정)'}</div>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#166534' }}>ID: {userId ? userId.slice(0, 16) + '...' : '로딩중...'}</div>
+                  </div>
+                  <button
+                    onClick={() => { if (confirm('정말 초기화하시겠습니까? 모든 게임 데이터가 삭제됩니다.')) { localStorage.removeItem(`gameData_${userId}`); window.location.reload(); } }}
+                    style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg,#ef4444,#f43f5e)', color: 'white', border: '3px solid #b91c1c', borderRadius: '10px', fontWeight: '900', fontSize: '15px', cursor: 'pointer', flexShrink: 0 }}>
+                    🗑️ 게임 데이터 초기화
+                  </button>
+                  <div style={{ textAlign: 'center', fontSize: '12px', fontWeight: '700', color: '#b45309', flexShrink: 0 }}>⚠️ 초기화하면 모든 데이터가 삭제됩니다</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ─── 하단 네비게이션 ─── */}
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top,#78350f,#92400e)', borderTop: '3px solid #451a03', padding: '4px' }}>
+            <div style={{ maxWidth: '672px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '4px' }}>
+              {[
+                { screen: 'game', icon: '🏠', label: '홈' },
+                { screen: 'stats', icon: '🏆', label: '정보' },
+                { screen: 'ranking', icon: '📈', label: '랭킹' },
+              ].map(({ screen, icon, label }) => (
+                <button key={screen} onClick={() => setCurrentScreen(screen)}
+                  className={`nav-button ${currentScreen === screen ? 'active' : ''}`}
+                  style={{ padding: '3px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '16px' }}>{icon}</div>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: currentScreen === screen ? '#78350f' : '#fef3c7' }}>{label}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(RaiseSocialWorker));
+  </script>
+</body>
+
+</html>
