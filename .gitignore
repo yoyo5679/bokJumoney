@@ -11,3 +11,12 @@ API_REGISTRY.md
 # 임시/테스트 파일
 fix_conditions.py
 clean_script.py
+
+# Agent/Skill 관련
+.agent/
+.agents/
+_agents/
+_agent/
+
+# 인증 관련
+*.pem

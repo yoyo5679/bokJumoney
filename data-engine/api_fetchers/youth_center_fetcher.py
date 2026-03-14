@@ -12,11 +12,10 @@ load_dotenv(os.path.join(_root_dir, '.env'))
 API_KEYS = [
     os.getenv('YOUTH_CENTER_API_KEY_1', ''),
     os.getenv('YOUTH_CENTER_API_KEY_2', ''),
-    os.getenv('YOUTH_CENTER_API_KEY_3', ''),
 ]
 API_KEYS = [k for k in API_KEYS if k]  # 빈 키 제거
 if not API_KEYS:
-    raise ValueError(".env 파일에 YOUTH_CENTER_API_KEY_1~3가 없습니다.")
+    raise ValueError(".env 파일에 YOUTH_CENTER_API_KEY_1, 2가 없습니다.")
 
 BASE_URL = "http://www.youthcenter.go.kr:8080/opi/youthPlcyList.do"
 

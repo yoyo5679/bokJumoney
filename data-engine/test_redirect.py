@@ -2,10 +2,17 @@ import urllib.request
 import urllib.parse
 import xml.etree.ElementTree as ET
 import json
+import os
+from dotenv import load_dotenv
+
+# load .env
+_root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(_root_dir, '.env'))
+api_key = os.getenv('YOUTH_CENTER_API_KEY_1')
 
 url = "https://www.youthcenter.go.kr/opi/youthPlcyList.do"
 params = {
-    "openApiVlak": "c3da64b8-48a4-4139-9fe5-5e78ebed242f",
+    "openApiVlak": api_key,
     "display": "5",
     "pageIndex": "1"
 }
