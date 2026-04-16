@@ -391,6 +391,254 @@ function shootConfetti() {
 
 // 전역 변수로 검색 결과 저장
 let currentBenefits = { custom: [], local: [], agency: [] };
+let localDataLoading = false; // 지역 지원 탭 API 로딩 상태
+
+// ── 지역 코드 매핑 (온통청년 API zipCd 기준) ──
+const REGION_ZIP_CODES = {
+    'seoul': '11000',
+    'busan': '26000',
+    'daegu': '27000',
+    'incheon': '28000',
+    'gwangju': '29000',
+    'daejeon': '30000',
+    'ulsan': '31000',
+    'sejong': '36000',
+    'gyeonggi': '41000',
+    'gangwon': '51000',
+    'chungbuk': '43000',
+    'chungnam': '44000',
+    'jeonbuk': '45000',
+    'jeonnam': '46000',
+    'gyeongbuk': '47000',
+    'gyeongnam': '48000',
+    'jeju': '50000'
+};
+
+// ── API lclsfNm 변환 (response → 내부 카테고리) ──
+const YOUTH_POLICY_CATEGORY_MAP = {
+    '일자리': '취업',
+    '주거': '주거',
+    '교육': '교육',
+    '복지·문화': '생활지원',
+    '금융': '생활지원',
+    '참여·권리': '생활지원',
+    '참여·기반': '생활지원',
+};
+
+// ── 사용자 카테고리 → API lclsfNm 매핑 (필터링 용) ──
+// 사용자가 선택한 관심 분야를 포괄하는 대분류명 목록
+const USER_CAT_TO_LCLSF = {
+    '취업':     ['일자리'],
+    '주거':     ['주거'],
+    '교육':     ['교육'],
+    '의료':     ['복지·문화'],
+    '생활지원': ['복지·문화', '금융', '참여·권리', '참여·기반'],
+    '육아':     ['복지·문화'],
+};
+
+// ── 서울 자치구 이름 → 법정시군구코드 매핑 ──
+const SEOUL_DISTRICT_ZIP = {
+    '강남구': '11680', '강동구': '11740', '강북구': '11305',
+    '강서구': '11500', '관악구': '11620', '광진구': '11215',
+    '구로구': '11530', '금천구': '11545', '노원구': '11350',
+    '도봉구': '11320', '동대문구': '11230', '동작구': '11590',
+    '마포구': '11440', '서대문구': '11410', '서초구': '11650',
+    '성동구': '11200', '성북구': '11290', '송파구': '11710',
+    '양천구': '11470', '영등포구': '11560', '용산구': '11170',
+    '은평구': '11380', '종로구': '11110', '중구': '11140',
+    '중랑구': '11260'
+};
+
+// ── 사용자 선택 조건 5종 필터링 ──
+function matchYouthPolicy(policy, userAnswers) {
+    const today = new Date();
+    const todayStr = today.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+
+    // ── 필터 1: 마감기한 ──
+    // bizPrdEndYmd가 있고 오늘보다 이전이면 제외
+    const endDate = (policy.bizPrdEndYmd || '').replace(/[^0-9]/g, '').slice(0, 8);
+    if (endDate && endDate < todayStr) return false;
+
+    // ── 필터 2: 연령대 ──
+    // sprtTrgtAgeLmtYn === 'Y'일 때만 연령 제한 있음
+    if (policy.sprtTrgtAgeLmtYn === 'Y' && userAnswers.age) {
+        const minAge = parseInt(policy.sprtTrgtMinAge) || 0;
+        const maxAge = parseInt(policy.sprtTrgtMaxAge) || 99;
+        const ageRangeMap = {
+            '10대이하': [14, 19], '20대': [20, 29], '30대': [30, 39],
+            '40대': [40, 49], '50대': [50, 59], '60대이상': [60, 99]
+        };
+        const [ageMin, ageMax] = ageRangeMap[userAnswers.age] || [0, 99];
+        // 사용자 연령대가 정책 허용 범위와 전혀 안 겹치면 제외
+        if (ageMax < minAge || ageMin > maxAge) return false;
+    }
+
+    // ── 필터 3: 시/군/구 및 기관명 필터 ──
+    if (userAnswers.region) {
+        // 1) 지자체명 기반 타 지역 정책 강제 제외 (의성군 등 타 지역 유입 정책 차단)
+        const instText = (policy.sprvsnInstCdNm || '') + ' ' + (policy.operInstCdNm || '');
+        const userRegionName = REGION_NAMES[userAnswers.region] || '';
+
+        const OTHER_PROVINCES = [
+            '부산광역시', '부산시', '부산', '대구광역시', '대구시', '대구',
+            '인천광역시', '인천시', '인천', '광주광역시', '광주시', '광주',
+            '대전광역시', '대전시', '대전', '울산광역시', '울산시', '울산',
+            '세종특별자치시', '세종시', '세종', '경기도', '경기',
+            '강원특별자치도', '강원도', '강원', '충청북도', '충북',
+            '충청남도', '충남', '전북특별자치도', '전라북도', '전북',
+            '전라남도', '전남', '경상북도', '경북', '경상남도', '경남',
+            '제주특별자치도', '제주도', '제주'
+        ].filter(p => !userRegionName || !p.startsWith(userRegionName));
+
+        const isOtherRegionInst = OTHER_PROVINCES.some(kw => instText.includes(kw));
+        if (isOtherRegionInst) return false;
+
+        // 2) zipCd 검사
+        const cityZip     = REGION_ZIP_CODES[userAnswers.region];          // e.g. '11000'
+        const districtZip = SEOUL_DISTRICT_ZIP[userAnswers.subRegion] || null; // e.g. '11680' or null
+        const policyZip   = (policy.zipCd || '').replace(/\s/g, '');
+
+        if (policyZip) {
+            const hasCity     = cityZip     ? policyZip.includes(cityZip)     : false;
+            const hasDistrict = districtZip ? policyZip.includes(districtZip) : false;
+            // 지정된 구가 없을 때는 시 코드만 검사, 구가 있으면 둘 중 하나라도 맞으면 통과
+            if (!hasCity && !hasDistrict) return false;
+        }
+    }
+
+    // ── 필터 4: 관심 카테고리 ──
+    // 사용자가 '전체'를 선택하지 않은 경우, 선택한 카테고리 중 하나와 lclsfNm이 매칭돼야 함
+    const userCats = Array.isArray(userAnswers.category)
+        ? userAnswers.category
+        : (userAnswers.category ? [userAnswers.category] : []);
+
+    if (userCats.length > 0 && !userCats.includes('전체')) {
+        const policyLclsf = policy.lclsfNm || '';
+        const catMatched = userCats.some(cat => {
+            const lclsfList = USER_CAT_TO_LCLSF[cat] || [];
+            return lclsfList.some(lclsf => policyLclsf.includes(lclsf));
+        });
+        if (!catMatched) {
+            // [지역 특화 정책 보정] 내가 사는 구(예: 중랑구)의 찐 로컬 정책이면 분야 상관없이 무조건 띄워주기!
+            const instText = (policy.sprvsnInstCdNm || '') + ' ' + (policy.operInstCdNm || '');
+            const subRegionName = userAnswers.subRegion || '';
+            if (subRegionName && instText.includes(subRegionName)) {
+                // 특화 정책이므로 통과
+            } else {
+                return false;
+            }
+        }
+    }
+
+    // ── 필터 5: 가구 상황 (부분 적용) ──
+    // API가 제공하는 earnCndSeCd(소득조건)로 저소득 여부를 간접 필터링
+    // '저소득'을 선택하지 않은 사용자에게 저소득 전용 정책 제외 (earnCndSeCd === '03' = 저소득층 한정)
+    // → 현재는 과도한 제외를 막기 위해 소득 필터는 적용하지 않음 (정보 부족)
+    // mrgSttsCd, jobCd 등 코드 정의가 명세에 없어 안전하게 스킵
+
+    return true;
+}
+
+// ── 온통청년 청년정책 API 조회 (서버리스 프록시 경유) ──
+async function fetchSeoulYouthPolicies(userAnswers) {
+    const cityZip   = REGION_ZIP_CODES[userAnswers.region] || '11000';
+    const regionName = REGION_NAMES[userAnswers.region] || '서울';
+
+    // 구가 선택된 경우 시 전체와 지정된 구를 각각 호출하여 통합 (API는 쉼표 구분자 미지원)
+    const queries = [
+        { zipCd: cityZip, page: 1 }
+    ];
+    
+    if (userAnswers.subRegion) {
+        const districtZip = SEOUL_DISTRICT_ZIP[userAnswers.subRegion];
+        if (districtZip) {
+            queries.push({ zipCd: districtZip, page: 1 });
+        }
+    }
+
+    try {
+        const fetches = queries.map(q => {
+            // 한 번에 확실하게 담아오기 위해 pageSize를 최대치 수준인 500으로 상향!
+            return fetch(`/api/youth-policy?pageNum=${q.page}&pageSize=500&zipCd=${q.zipCd}`);
+        });
+        const responses = await Promise.all(fetches);
+        const jsons = await Promise.all(responses.map(r => r.json()));
+
+        let allPolicies = [];
+        jsons.forEach(data => {
+            const list = data?.result?.youthPolicyList || [];
+            allPolicies = allPolicies.concat(list);
+        });
+
+        // 중복 제거 (plcyNo 기준)
+        const seen = new Set();
+        allPolicies = allPolicies.filter(p => {
+            if (seen.has(p.plcyNo)) return false;
+            seen.add(p.plcyNo);
+            return true;
+        });
+
+        // 5개 필터 적용
+        const filtered = allPolicies.filter(p => matchYouthPolicy(p, userAnswers));
+
+        // 사용자 선택 기반 matchedTags 생성
+        const buildMatchedTags = (p) => {
+            const tags = [];
+            if (userAnswers.subRegion) tags.push(userAnswers.subRegion);
+            else tags.push(regionName);
+
+            const lclsf = p.lclsfNm || '';
+            if (lclsf) tags.push(lclsf);
+
+            // 연령대 태그
+            if (userAnswers.age) tags.push(userAnswers.age);
+
+            return [...new Set(tags)];
+        };
+
+        // 복주머니 카드 형식으로 변환
+        const converted = filtered.map(p => {
+            const lclsf    = p.lclsfNm || '';
+            const category = YOUTH_POLICY_CATEGORY_MAP[lclsf] || '생활지원';
+            const endDate  = (p.bizPrdEndYmd || '').replace(/[^0-9]/g, '').slice(0, 8);
+
+            let deadlineText = '';
+            if (endDate) {
+                deadlineText = `마감 ${endDate.slice(0, 4)}.${endDate.slice(4, 6)}.${endDate.slice(6, 8)}`;
+            } else if (p.bizPrdSeCd === '01') {
+                deadlineText = '상시모집';
+            }
+
+            return {
+                name:        p.plcyNm || '청년정책',
+                desc:        (p.plcyExplnCn || p.plcySprtCn || '').slice(0, 200),
+                tag:         p.sprvsnInstCdNm || regionName + ' 청년정책',
+                applyUrl:    p.aplyUrlAddr || p.refUrlAddr1 || `https://www.youthcenter.go.kr/youthPolicy/ythPlcyTotalSearch/ythPlcyDetail/${p.plcyNo}?isNew=N`,
+                category:    category,
+                icon:        getCategoryIcon(category),
+                isLocal:     true,
+                relevance:   80,
+                monthlyAmount: 0,
+                matchedTags:   buildMatchedTags(p),
+                deadlineText:  deadlineText,
+                plcyNo:       p.plcyNo,
+            };
+        });
+
+        return converted;
+    } catch (err) {
+        console.error('[fetchSeoulYouthPolicies Error]', err);
+        return [];
+    }
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        '취업': '💼', '주거': '🏠', '교육': '📚',
+        '의료': '🏥', '생활지원': '🎁', '육아': '👶'
+    };
+    return icons[category] || '🌱';
+}
 
 // 탭 변경
 function changeTab(category, el) {
@@ -522,6 +770,52 @@ function showResult() {
 
     // 기본 탭(맞춤 혜택) 렌더링
     renderBenefits('custom');
+
+    // ── 지역 지원 탭: 온통청년 API 비동기 조회 (서울 포함 전 지역) ──
+    if (selectedRegion && REGION_ZIP_CODES[selectedRegion]) {
+        localDataLoading = true;
+        // 탭 버튼에 로딩 표시
+        if (localTabBtn) {
+            localTabBtn.innerHTML = `📍 지역 지원 <span style="background:#6366f1;color:white;border-radius:10px;padding:1px 6px;font-size:11px;margin-left:4px;">로딩중...</span>`;
+        }
+
+        fetchSeoulYouthPolicies(answers).then(apiPolicies => {
+            localDataLoading = false;
+            // 기존 isLocal 항목에 API 결과를 추가 (중복 제거)
+            const existingNames = new Set(currentBenefits.local.map(b => b.name));
+            apiPolicies.forEach(p => {
+                if (!existingNames.has(p.name)) {
+                    currentBenefits.local.push(p);
+                }
+            });
+
+            // 정렬: relevance + matchedTags
+            currentBenefits.local.sort((a, b) => {
+                let sA = (a.relevance || 0) + ((a.matchedTags ? a.matchedTags.length : 0) * 1000);
+                let sB = (b.relevance || 0) + ((b.matchedTags ? b.matchedTags.length : 0) * 1000);
+                return sB - sA;
+            });
+
+            // 탭 버튼 배지 업데이트
+            if (localTabBtn) {
+                if (currentBenefits.local.length > 0) {
+                    localTabBtn.innerHTML = `📍 지역 지원 <span style="background:#ef4444;color:white;border-radius:10px;padding:1px 6px;font-size:11px;margin-left:4px;">${currentBenefits.local.length}</span>`;
+                } else {
+                    localTabBtn.innerHTML = `📍 지역 지원`;
+                }
+            }
+
+            // 현재 지역 지원 탭이 열려 있으면 즉시 재렌더링
+            const activeTab = document.querySelector('.tab-btn.active');
+            if (activeTab && activeTab.getAttribute('onclick') && activeTab.getAttribute('onclick').includes('local')) {
+                renderBenefits('local');
+            }
+        }).catch(err => {
+            localDataLoading = false;
+            console.error('[지역 지원 API 조회 실패]', err);
+            if (localTabBtn) localTabBtn.innerHTML = `📍 지역 지원`;
+        });
+    }
 }
 
 // 혜택 리스트 렌더링
@@ -565,7 +859,16 @@ function renderBenefits(category) {
 
     const items = currentBenefits[category];
     if (!items || items.length === 0) {
-        if (category !== 'agency') {
+        if (category === 'local' && localDataLoading) {
+            // API 로딩 중일 때 스피너
+            list.innerHTML = `
+                <div style="text-align:center; padding:50px 20px;">
+                    <div style="font-size:32px; margin-bottom:12px;">🔍</div>
+                    <div style="font-size:15px; font-weight:700; color:#4f46e5; margin-bottom:6px;">지역 청년정책 조회 중...</div>
+                    <div style="font-size:13px; color:#64748b;">온통청년 API에서 실시간으로 정책을 가져오고 있어요!</div>
+                    <div style="margin-top:16px; display:inline-block; width:32px; height:32px; border:3px solid #e0e7ff; border-top-color:#4f46e5; border-radius:50%; animation:spin 1s linear infinite;"></div>
+                </div>`;
+        } else if (category !== 'agency') {
             list.innerHTML = '<p style="text-align:center; padding:40px; color:#64748b;">관련된 혜택이 아직 없습니다.</p>';
         }
         return;
@@ -584,12 +887,19 @@ function renderBenefits(category) {
             tagsHtml = `<div class="hashtags">` + b.matchedTags.map(t => `<span class="hashtag-badge">#${t}</span>`).join('') + `</div>`;
         }
 
+        // 지역 지원 탭 전용: 마감기한 배지
+        let deadlineBadge = '';
+        if (b.deadlineText) {
+            deadlineBadge = `<span style="display:inline-block;font-size:11px;font-weight:700;color:#059669;background:#d1fae5;padding:2px 8px;border-radius:8px;margin-bottom:6px;">📅 ${b.deadlineText.replace(' | ', '')}</span>`;
+        }
+
         // 블로그 검색 URL: 혜택명 키워드로 자동 연결
         const blogKeyword = encodeURIComponent(b.name.replace(/[\[\]]/g, '').trim());
         const blogUrl = `https://10000nanzip.tistory.com/search/${blogKeyword}`;
 
         card.innerHTML = `
             <div class="agency-badge">🏛️ ${b.tag || '중앙부처'}</div>
+            ${deadlineBadge}
             ${tagsHtml}
             <div class="benefit-title">${b.name}</div>
             <div class="benefit-desc">${b.desc || b.description}</div>

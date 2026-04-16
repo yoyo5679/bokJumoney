@@ -1,0 +1,15 @@
+﻿??API Key ?뺤씤: e5ccb665...
+
+?뱻 ?붿껌 URL: https://www.youthcenter.go.kr/go/ythip/getPlcy?apiKeyNm=e5ccb665-bf11-41e3-8867-7085f483a129&pageNum=1&pageSize=10&rtnTy...
+??HTTP ?곹깭肄붾뱶: 200
+?벀 ?묐떟 湲몄씠: 32755 bytes
+
+--- ?묐떟 ?먮낯 (泥?500?? ---
+{"resultCode":200,"resultMessage":"?깃났?곸쑝濡??곗씠?곕? 媛吏怨??붿뒿?덈떎.","result":{"pagging":{"totCount":437,"pageNum":1,"pageSize":10},"youthPolicyList":[{"plcyNo":"20260415005400112751","bscPlanCycl":"2","bscPlanPlcyWayNo":"004","bscPlanFcsAsmtNo":"013","bscPlanAsmtNo":"046","pvsnInstGroupCd":"0054001","plcyPvsnMthdCd":"0042010","plcyAprvSttsCd":"0044002","plcyNm":"(蹂듭?遺) 26???뺤떊嫄닿컯 ?щ━?곷떞 諛붿슦泥섏궗??,"plcyKywdNm":"諛붿슦泥?,"plcyExplnCn":"?곗슱쨌遺덉븞 ???뺤꽌???대젮??쇰줈 ?명빐 ?щ━?곷떞???꾩슂??援???먭쾶 ?꾨Ц?곸씤 ?щ━?곷떞 ?쒕퉬?ㅻ? ?쒓났?⑸땲??","lclsfNm":"湲덉쑖節λ났吏節λЦ??,"mcls
+---
+
+??JSON ?뚯떛 ?깃났!
+?뱥 理쒖긽???? ['resultCode', 'resultMessage', 'result']
+  [resultCode]: 200
+  [resultMessage]: ?깃났?곸쑝濡??곗씠?곕? 媛吏怨??붿뒿?덈떎.
+  [result]: {'pagging': {'totCount': 437, 'pageNum': 1, 'pageSize': 10}, 'youthPolicyList': [{'plcyNo': '2026041
