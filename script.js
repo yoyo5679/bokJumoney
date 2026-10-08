@@ -17,29 +17,91 @@ const linkTarget = isMobile ? '_self' : '_blank';
 // ── 지역별 포털 데이터 (복지로 API 연동 후 자동 채워질 예정) ──
 const REGIONAL_PORTALS = {};
 
-// 시군구 데이터
-const SUB_REGIONS = {
-    'seoul': ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'],
-    'gyeonggi': ['수원시', '고양시', '용인시', '성남시', '부천시', '화성시', '안산시', '남양주시', '안양시', '평택시', '시흥시', '파주시', '의정부시', '김포시', '광주시', '광명시', '군포시', '하남시', '오산시', '양주시', '이천시', '구리시', '안성시', '의왕시', '여주시', '양평군', '동두천시', '과천시', '가평군', '연천군'],
-    'busan': ['강서구', '금정구', '기장군', '남구', '동구', '동래구', '부산진구', '북구', '사상구', '사하구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구'],
-
-    'incheon': ['강화군', '계양구', '남동구', '동구', '미추홀구', '부평구', '서구', '연수구', '옹진군', '중구'],
-    'daegu': ['군위군', '남구', '달서구', '달성군', '동구', '북구', '서구', '수성구', '중구'],
-    'gwangju': ['광산구', '남구', '동구', '북구', '서구'],
-    'daejeon': ['대덕구', '동구', '서구', '유성구', '중구'],
-    'ulsan': ['남구', '동구', '북구', '울주군', '중구'],
-    'sejong': ['세종시'],
-    'gangwon': ['춘천시', '원주시', '강릉시', '동해시', '속초시', '홍천군', '횡성군', '영월군', '평창군'],
-    'chungbuk': ['청주시', '충주시', '제천시', '보은군', '옥천군', '영동군', '증평군', '진천군', '괴산군', '음성군', '단양군'],
-    'chungnam': ['천안시', '공주시', '보령시', '아산시', '서산시', '논산시', '계룡시', '당진시'],
-    'jeonbuk': ['전주시', '군산시', '익산시', '정읍시', '남원시', '김제시', '완주군'],
-    'jeonnam': ['목포시', '여수시', '순천시', '나주시', '광양시', '담양군', '곡성군', '구례군'],
-    'gyeongbuk': ['포항시', '경주시', '김천시', '안동시', '구미시', '영주시', '영천시', '상주시', '문경시', '경산시'],
-    'gyeongnam': ['창원시', '진주시', '통영시', '사천시', '김해시', '밀양시', '거제시', '양산시'],
-    'jeju': ['제주시', '서귀포시']
+// ── 혜택 데이터 준비 ──
+// generated_data.js(전국 혜택, SUB_REGIONS)와 data/regions/{지역}.js(지역 혜택)는
+// data-engine/build_site_data.py 가 만든 압축 형식이라 화면용 필드로 변환해서 쓴다.
+const AGE_RANGES = {
+    '10대이하': [0, 19], '20대': [20, 29], '30대': [30, 39],
+    '40대': [40, 49], '50대': [50, 59], '60대이상': [60, 150]
+};
+const LIFECYCLE_AGES = {
+    '임신출산': [0, 1], '영유아': [0, 6], '아동': [7, 12], '청소년': [13, 18],
+    '청년': [19, 39], '중장년': [40, 64], '노년': [65, 150]
 };
 
-// welfareData is now provided by generated_data.js
+function overlappingLabels(range, table) {
+    return Object.keys(table).filter(label => table[label][0] <= range[1] && range[0] <= table[label][1]);
+}
+
+function matchesWelfareItem(raw, data) {
+    if (raw.r && !raw.r.includes(data.region)) return false;
+    if (raw.s && data.subRegion && raw.s !== data.subRegion) return false;
+    if (raw.a) {
+        // 대상 연령은 혜택 받는 사람 기준 → 본인 나이대나 선택한 생애주기(가구원) 중 하나라도 겹치면 통과
+        const ranges = [AGE_RANGES[data.age], ...(data.lc || []).map(lc => LIFECYCLE_AGES[lc])].filter(Boolean);
+        if (ranges.length && !ranges.some(([lo, hi]) => raw.a[0] <= hi && lo <= raw.a[1])) return false;
+    }
+    if (raw.q) {
+        // 묶음마다 사용자의 생애주기/가구상황 중 하나 이상 일치해야 한다
+        const mine = [...(data.lc || []), ...(data.hh || [])];
+        if (!raw.q.every(group => group.some(token => mine.includes(token)))) return false;
+    }
+    return true;
+}
+
+function prepareWelfareItem(raw) {
+    // 대상 연령이 좁은 혜택에만 연령대/생애주기 해시태그를 붙여 결과 상단에 오게 한다
+    const tags = raw.q ? raw.q.flat() : [];
+    if (raw.a) {
+        const ageLabels = overlappingLabels(raw.a, AGE_RANGES);
+        const lifeLabels = overlappingLabels(raw.a, LIFECYCLE_AGES);
+        if (ageLabels.length <= 2) tags.push(...ageLabels);
+        if (lifeLabels.length <= 2) tags.push(...lifeLabels);
+    }
+    return {
+        id: raw.k,
+        name: raw.n,
+        tag: raw.t,
+        description: raw.d || '',
+        applyUrl: raw.u,
+        monthlyAmount: 0,
+        icon: raw.i,
+        category: raw.c,
+        relevance: raw.v || 0,
+        isLocal: !!raw.r,
+        tags: [...new Set(tags)],
+        condition: data => matchesWelfareItem(raw, data)
+    };
+}
+
+welfareData.forEach((raw, i) => { welfareData[i] = prepareWelfareItem(raw); });
+
+// 지역 혜택은 지역을 고를 때 해당 지역 파일만 한 번 불러온다
+const loadedRegions = {};
+const loadedItemIds = new Set(welfareData.map(item => item.id));
+
+function registerRegionData(region, items) {
+    items.forEach(raw => {
+        if (loadedItemIds.has(raw.k)) return; // 광주·전남 통합 기관 혜택은 두 지역 파일에 모두 있음
+        loadedItemIds.add(raw.k);
+        welfareData.push(prepareWelfareItem(raw));
+    });
+}
+
+function loadRegionData(region) {
+    if (!region) return Promise.resolve();
+    if (!loadedRegions[region]) {
+        loadedRegions[region] = new Promise(resolve => {
+            const script = document.createElement('script');
+            script.src = `data/regions/${region}.js?v=${WELFARE_DATA_VERSION}`;
+            script.onload = resolve;
+            script.onerror = resolve; // 실패해도 전국 혜택으로 결과를 보여준다
+            document.head.appendChild(script);
+        });
+    }
+    return loadedRegions[region];
+}
+
 // 옵션 선택
 function selectOption(el, key, isMulti = false) {
     const parent = el.closest('.options');
@@ -76,6 +138,7 @@ function selectOption(el, key, isMulti = false) {
             const subArea = document.getElementById('subRegionArea');
             const subOpts = document.getElementById('subRegionOptions');
             const regionKey = el.dataset.val;
+            loadRegionData(regionKey); // 결과 화면 전에 지역 혜택을 미리 받아둔다
 
             // 시군구 데이터가 있으면 렌더링
             if (SUB_REGIONS[regionKey] && SUB_REGIONS[regionKey].length > 0) {
@@ -213,7 +276,7 @@ function startLoading() {
         setTimeout(() => {
             const el = document.getElementById(id);
             if (el) el.classList.add('show');
-            if (i === 4) setTimeout(showResult, 800);
+            if (i === 4) setTimeout(() => loadRegionData(answers.region).then(showResult), 800);
         }, 500 + i * 600);
     });
 }
@@ -259,20 +322,12 @@ function calcResult() {
         // 카테고리 필터링 (다중 선택 매칭)
         let isCategoryMatch = true;
         if (cats.length > 0 && !cats.includes('전체')) {
-            if (!cats.includes(item.category) && !item.isLocal) isCategoryMatch = false;
+            if (!cats.includes(item.category)) isCategoryMatch = false;
         }
 
         if (item.condition(data) && isCategoryMatch) {
             // 태그 추출 및 매칭 (교집합 활용)
-            let itemTags = [item.category];
-            const condStr = item.condition.toString();
-            const keywords = ['청년', '영유아', '아동', '청소년', '중장년', '노년', '임신출산', '저소득', '다자녀', '한부모조손', '장애인'];
-            keywords.forEach(kw => {
-                if (condStr.includes(kw)) itemTags.push(kw);
-            });
-            if (condStr.includes('age === "20대"')) itemTags.push('20대');
-            if (condStr.includes('age === "30대"')) itemTags.push('30대');
-            if (condStr.includes('incomeNum <= 100') || condStr.includes('incomeNum <= 250')) itemTags.push('저소득');
+            let itemTags = [item.category, ...(item.tags || [])];
 
             // 사용자의 선택항목과 교집합
             const userSelections = [answers.age, ...(data.lc || []), ...(data.hh || []), ...(data.cats || [])];
@@ -789,11 +844,11 @@ function chatSearch(query) {
     const ageMap = { '10대': '10대이하', '20대': '20대', '30대': '30대', '40대': '40대', '50대': '50대', '60대': '60대이상' };
     const categoryMap = {
         '주거': '주거', '집': '주거', '전세': '주거', '월세': '주거',
-        '취업': '취업', '일자리': '취업', '취직': '취업', '창업': '취업',
-        '육아': '육아', '아이': '육아', '보육': '육아', '출산': '육아',
+        '취업': '일자리', '일자리': '일자리', '취직': '일자리', '창업': '일자리',
+        '육아': '보육', '아이': '보육', '보육': '보육', '출산': '임신출산',
         '교육': '교육', '학비': '교육', '장학': '교육',
-        '의료': '의료', '건강': '의료', '병원': '의료',
-        '생활비': '생활비', '생계': '생활비', '지원금': '생활비'
+        '의료': '신체건강', '건강': '신체건강', '병원': '신체건강',
+        '생활비': '생활지원', '생계': '생활지원', '지원금': '생활지원'
     };
     const householdMap = {
         '1인': '1인가구', '혼자': '1인가구', '독신': '1인가구',
@@ -821,6 +876,8 @@ function chatSearch(query) {
         category: targetCategory || '전체',
         region: answers.region || 'seoul',
         subRegion: answers.subRegion || '',
+        lc: answers.lifeCycle || [],
+        hh: answers.household || [],
         incomeNum, familyCount
     };
 

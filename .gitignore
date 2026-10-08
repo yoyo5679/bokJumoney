@@ -11,3 +11,7 @@ API_REGISTRY.md
 # 임시/테스트 파일
 fix_conditions.py
 clean_script.py
+
+# 파이썬 캐시 / macOS
+__pycache__/
+.DS_Store
