@@ -20,3 +20,7 @@ _agent/
 
 # 인증 관련
 *.pem
+
+# 파이썬 캐시 / macOS
+__pycache__/
+.DS_Store
