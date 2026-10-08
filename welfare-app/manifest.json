@@ -1,15 +1,16 @@
 {
-  "name": "복(지)주머니 - 숨은 혜택 찾기",
+  "name": "복주머니 · 나에게 맞는 정부 지원금 찾기",
   "short_name": "복주머니",
-  "start_url": ".",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#FFF9FB",
-  "theme_color": "#FF6B6B",
+  "background_color": "#FFFFFF",
+  "theme_color": "#F04452",
   "icons": [
     {
       "src": "chatbot_avatar.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "sizes": "640x640",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
