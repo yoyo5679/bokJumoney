@@ -88,7 +88,10 @@ function loadRegionData(region) {
 // ── 온통청년 실시간 조회 (Vercel 서버 함수 api/youth-policy.js 경유) ──
 // 미리 만들어 둔 청년정책 데이터에 최신 정책을 더한다. 배포 환경에서만 동작하고,
 // 서버 함수가 없거나 응답이 늦으면 건너뛰고 미리 만든 데이터만으로 결과를 보여준다.
-const LIVE_YOUTH_TIMEOUT = 4000;
+const LIVE_YOUTH_PAGE_SIZE = 100;
+const LIVE_YOUTH_MAX_PAGES = 15;
+const LIVE_YOUTH_TIMEOUT = 10000; // 요청 하나당 제한 (백그라운드)
+const LIVE_YOUTH_WAIT = 1500;     // 결과 화면을 띄우기 전에 더 기다려 주는 시간
 
 // 온통청년 zipCd (법정동 시도·시군구 코드, 전북특별자치도는 2024년부터 52로 시작)
 const YOUTH_SIDO_ZIP = {
@@ -188,30 +191,41 @@ function youthPolicyToRaw(p, today) {
 
 const liveYouthLoads = {};
 
+function fetchYouthPage(zip, page) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), LIVE_YOUTH_TIMEOUT);
+    return fetch(`/api/youth-policy?pageNum=${page}&pageSize=${LIVE_YOUTH_PAGE_SIZE}&zipCd=${zip}`, { signal: controller.signal })
+        .then(res => (res.ok ? res.json() : null))
+        .finally(() => clearTimeout(timer));
+}
+
+function addYouthPolicies(data) {
+    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const policies = data?.result?.youthPolicyList || [];
+    upsertWelfareItems(policies.map(p => youthPolicyToRaw(p, today)).filter(Boolean));
+}
+
+// 시군구 코드로 조회하면 그 시군구에 해당하는 시도·전국 정책도 함께 온다.
+// 한 번에 많이 받으면 느려서(500건 5~6초) 100건씩 나눠 동시에 받는다.
 function loadLiveYouthPolicies(region, subRegion) {
-    const zips = [YOUTH_SIDO_ZIP[region], (YOUTH_DISTRICT_ZIP[region] || {})[subRegion]].filter(Boolean);
-    const key = zips.join(',');
-    if (!zips.length) return Promise.resolve();
-    if (!liveYouthLoads[key]) {
-        liveYouthLoads[key] = (async () => {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), LIVE_YOUTH_TIMEOUT);
+    const zip = (YOUTH_DISTRICT_ZIP[region] || {})[subRegion] || YOUTH_SIDO_ZIP[region];
+    if (!zip) return Promise.resolve();
+    if (!liveYouthLoads[zip]) {
+        liveYouthLoads[zip] = (async () => {
             try {
-                // 온통청년 API는 zipCd 여러 개를 한 번에 받지 않아 시도·시군구를 따로 조회한다
-                const responses = await Promise.all(zips.map(zip =>
-                    fetch(`/api/youth-policy?pageNum=1&pageSize=500&zipCd=${zip}`, { signal: controller.signal })
-                        .then(res => (res.ok ? res.json() : null))));
-                const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-                const policies = responses.flatMap(data => data?.result?.youthPolicyList || []);
-                upsertWelfareItems(policies.map(p => youthPolicyToRaw(p, today)).filter(Boolean));
+                const first = await fetchYouthPage(zip, 1);
+                addYouthPolicies(first);
+                const total = first?.result?.pagging?.totCount || 0;
+                const pages = Math.min(Math.ceil(total / LIVE_YOUTH_PAGE_SIZE), LIVE_YOUTH_MAX_PAGES);
+                const rest = [];
+                for (let page = 2; page <= pages; page++) rest.push(fetchYouthPage(zip, page).then(addYouthPolicies));
+                await Promise.allSettled(rest);
             } catch {
-                delete liveYouthLoads[key]; // 로컬 환경·타임아웃 등 → 다음에 다시 시도
-            } finally {
-                clearTimeout(timer);
+                delete liveYouthLoads[zip]; // 로컬 환경·타임아웃 등 → 다음에 다시 시도
             }
         })();
     }
-    return liveYouthLoads[key];
+    return liveYouthLoads[zip];
 }
 
 // 실시간 정책은 미리 만든 데이터보다 최신이므로 같은 정책이면 교체한다
@@ -829,10 +843,12 @@ function handleQuestionClick(event) {
         const subs = SUB_REGIONS[a.region] || [];
         if (subs.length === 1) a.subRegion = subs[0];
         loadRegionData(a.region); // 결과 화면 전에 미리 받아둔다
+        if (a.subRegion) loadLiveYouthPolicies(a.region, a.subRegion);
         renderQuestionBody();
         if (changed && subs.length > 1) $('subRegionLabel').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (btn.dataset.sub) {
         a.subRegion = btn.dataset.sub;
+        loadLiveYouthPolicies(a.region, a.subRegion); // 남은 질문에 답하는 동안 최신 청년정책을 받아둔다
         renderQuestionBody();
     }
 }
@@ -862,9 +878,11 @@ async function runMatching({ animate = true } = {}) {
     const steps = [...document.querySelectorAll('#loadingSteps li')];
     steps.forEach(li => li.classList.remove('is-done'));
     const ticks = animate ? steps.map((li, i) => wait(380 * (i + 1)).then(() => li.classList.add('is-done'))) : [];
+    // 실시간 청년정책은 설문 중에 미리 받기 시작하므로 결과 직전에는 잠깐만 더 기다린다 (공유 링크로 바로 열면 조금 더)
+    const live = loadLiveYouthPolicies(state.answers.region, state.answers.subRegion);
     await Promise.all([
         loadRegionData(state.answers.region),
-        loadLiveYouthPolicies(state.answers.region, state.answers.subRegion),
+        Promise.race([live, wait(animate ? LIVE_YOUTH_WAIT : 5000)]),
         ...ticks
     ]);
     if (document.body.dataset.screen !== 'loading') return; // 찾는 중에 뒤로 간 경우
