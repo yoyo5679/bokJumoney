@@ -8,16 +8,23 @@
     <meta name="description" content="나이·사는 곳·가족 상황만 고르면 정부24·복지로·온통청년의 공공 혜택 중 나에게 맞는 것만 골라드려요. 회원가입 없이 1분이면 끝나요.">
     <meta name="theme-color" content="#ffffff">
 
-    <link rel="canonical" href="https://bok-jumoney.vercel.app/">
+    <link rel="canonical" href="https://www.saboknote.com/benefits/">
+    <script>
+        // 예전 주소(bok-jumoney.vercel.app)로 바로 들어오면 사복노트 주소로 보낸다.
+        // 사복노트(/benefits/)를 거쳐 열린 화면은 브라우저 주소가 saboknote.com이라 그대로 둔다.
+        if (location.hostname === 'bok-jumoney.vercel.app') {
+            location.replace('https://www.saboknote.com/benefits/' + location.pathname.replace(/^\//, '') + location.search + location.hash);
+        }
+    </script>
 
     <!-- Open Graph / 공유 미리보기 -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="복주머니">
     <meta property="og:locale" content="ko_KR">
-    <meta property="og:url" content="https://bok-jumoney.vercel.app/">
+    <meta property="og:url" content="https://www.saboknote.com/benefits/">
     <meta property="og:title" content="복주머니 · 나에게 맞는 정부 지원금 찾기">
     <meta property="og:description" content="몇 가지 질문으로 정부24·복지로·온통청년 혜택 중 내 것만 골라드려요.">
-    <meta property="og:image" content="https://bok-jumoney.vercel.app/og-image.png">
+    <meta property="og:image" content="https://www.saboknote.com/benefits/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
