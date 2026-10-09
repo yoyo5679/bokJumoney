@@ -29,6 +29,14 @@
 
 ---
 
+---
+
+## ⚠️ 서비스 주소: www.saboknote.com/benefits/ (2026. 10. 9.부터)
+- 복주머니는 사복노트 주소 아래(`https://www.saboknote.com/benefits/`)에서 서비스돼요. 사복노트의 `vercel.json`이 `/benefits/…` 요청을 이 프로젝트(bok-jumoney.vercel.app)로 이어 붙여요.
+- 이 저장소의 main에 올리면 지금처럼 배포되고, 새 주소에도 바로 반영돼요.
+- **파일 경로는 꼭 상대 경로로 써 주세요.** `/script.js`, `/api/youth-policy`처럼 `/`로 시작하면 `/benefits/` 아래에서 파일을 못 찾아요. `script.js`, `api/youth-policy`처럼 써야 해요.
+- `bok-jumoney.vercel.app`으로 바로 들어온 방문자는 `index.html` 맨 위 스크립트가 새 주소로 보내요. 미리보기 배포 주소에서는 넘어가지 않아요.
+
 ## 3. 기술 스택 및 환경
 - **Frontend**: Pure HTML, CSS, JavaScript (프레임워크 없이 빠르고 가볍게 구현).
 - **Data Processor**: Python (정부 API 데이터를 가공하여 JS 데이터로 변환).
