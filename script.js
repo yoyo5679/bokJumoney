@@ -194,7 +194,8 @@ const liveYouthLoads = {};
 function fetchYouthPage(zip, page) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), LIVE_YOUTH_TIMEOUT);
-    return fetch(`/api/youth-policy?pageNum=${page}&pageSize=${LIVE_YOUTH_PAGE_SIZE}&zipCd=${zip}`, { signal: controller.signal })
+    // 상대 경로: saboknote.com/benefits/ 아래에서 열려도 /benefits/api/… 로 이 프로젝트의 API를 부른다
+    return fetch(`api/youth-policy?pageNum=${page}&pageSize=${LIVE_YOUTH_PAGE_SIZE}&zipCd=${zip}`, { signal: controller.signal })
         .then(res => (res.ok ? res.json() : null))
         .finally(() => clearTimeout(timer));
 }
