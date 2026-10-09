@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bok-jumoney.vercel.app/sitemap.xml
+Sitemap: https://www.saboknote.com/sitemap.xml
