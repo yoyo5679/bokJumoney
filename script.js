@@ -931,13 +931,33 @@ function scoreEntry(item, data) {
     return { item, matched: [...new Set(matched)], score, focused: specific || item.isLocal };
 }
 
+// 같은 혜택이 여러 출처(정부24·온통청년)나 해마다 다시 등록된 정책으로 따로 들어 있으면
+// 이름이 같은 것은 하나만 보여 준다. 목록은 점수 순으로 정렬된 상태라 먼저 나온 것을 남긴다.
+// 지역 혜택과 전국 혜택은 이름이 같아도 다른 사업일 수 있어 따로 둔다.
+function dedupeByName(list, getItem = e => e) {
+    const seen = new Set();
+    return list.filter(e => {
+        const item = getItem(e);
+        const key = (item.isLocal ? 'L:' : 'N:') + item.name.replace(/[\s·ㆍ・.,_\-()[\]]/g, '').toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+}
+
+// 점수가 같으면 신청 기간이 적힌 것, 더 최근에 등록된 것(온통청년 id에는 등록일이 들어 있음)을 앞에
+function fresherFirst(a, b) {
+    if (!!a.deadline !== !!b.deadline) return a.deadline ? -1 : 1;
+    return a.id > b.id ? -1 : a.id < b.id ? 1 : 0;
+}
+
 function computeResult() {
     const data = userProfile();
     const interests = state.answers.interests;
-    const entries = welfareData
+    const entries = dedupeByName(welfareData
         .filter(item => item.condition(data) && (!interests.length || interests.includes(item.category)))
-        .map(item => scoreEntry(item, data));
-    entries.sort((x, y) => y.score - x.score);
+        .map(item => scoreEntry(item, data))
+        .sort((x, y) => (y.score - x.score) || fresherFirst(x.item, y.item)), e => e.item);
     state.result = { entries, scope: 'mine', category: '', query: '', limit: PAGE_SIZE };
     $('resultSearchInput').value = '';
 }
@@ -1161,12 +1181,12 @@ function renderSearch() {
     const pool = welfareData.filter(item =>
         (!item.isLocal || item.regions.includes(region)) && matchesQuery(item, s.query));
     const tokens = s.query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    const scored = pool.map(item => ({
+    const scored = dedupeByName(pool.map(item => ({
         item,
         score: (tokens.some(t => item.name.toLowerCase().includes(t)) ? 1000 : 0) + (item.isLocal ? 200 : 0) + item.relevance
-    })).sort((x, y) => y.score - x.score);
+    })).sort((x, y) => (y.score - x.score) || fresherFirst(x.item, y.item)), e => e.item);
 
-    $('searchChips').innerHTML = categoryChipsHtml(pool, s.category);
+    $('searchChips').innerHTML = categoryChipsHtml(scored.map(e => e.item), s.category);
     const list = scored.filter(e => !s.category || e.item.category === s.category);
 
     const regionNote = region
