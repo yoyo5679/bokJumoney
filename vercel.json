@@ -3,6 +3,9 @@
   "functions": {
     "api/youth-policy.js": {
       "maxDuration": 15
+    },
+    "api/blog-feed.js": {
+      "maxDuration": 10
     }
   }
 }

@@ -231,6 +231,7 @@ img { display: block; max-width: 100%; }
     padding: 14px 0; border-bottom: 1px solid var(--line);
 }
 .article-item:last-child { border-bottom: 0; }
+a.article-item { color: inherit; text-decoration: none; }
 .article-item .vol {
     flex: none; width: 44px; height: 44px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;

@@ -341,6 +341,82 @@ const QUESTIONS = [
     }
 ];
 
+// ── 사복노트 블로그 글 ──
+// 혜택 카드의 '신청 꿀팁' 버튼이 관련 글로 바로 가도록, 제도 이름(keys)과 글 주소를 이어 둡니다.
+// date 는 글이 공개되는 날 — 예약 글은 그날이 지나야 연결해요 (그 전에는 블로그 검색으로 보냅니다).
+// keys 는 혜택 이름에 들어 있으면 연결되는 낱말이에요. 다른 제도까지 걸리지 않게 구체적으로 적어요.
+const BLOG_BASE = 'https://10000nanzip.tistory.com';
+const BLOG_POSTS = [
+    { id: '82', date: '2026-10-29', title: '2026 등유바우처·연탄쿠폰 난방비 지원 대상 금액 신청방법', keys: ['등유바우처', '연탄쿠폰', '등유'] },
+    { id: '81', date: '2026-10-28', title: '노인 무릎 인공관절 개안수술비 지원 대상 신청방법 2026', keys: ['인공관절', '개안수술'] },
+    { id: '80', date: '2026-10-27', title: '아동수당 지급 연령 확대 2026~2027 대상·금액·신청 방법 총정리', keys: ['아동수당'] },
+    { id: '79', date: '2026-10-26', title: '2026 국민취업지원제도 구직촉진수당 1유형 2유형 자격 신청 총정리', keys: ['국민취업지원', '구직촉진수당'] },
+    { id: '78', date: '2026-10-25', title: '2026 한부모가족 아동양육비 지원 자격 조건 금액 신청방법 총정리', keys: ['아동양육비'] },
+    { id: '77', date: '2026-10-24', title: '장애인연금과 장애수당 2026년 지원 자격·지급 금액·신청 방법 총정리', keys: ['장애인연금', '장애수당'] },
+    { id: '76', date: '2026-10-23', title: '2027년 노인일자리 신청 자격·유형별 활동비·신청 시기 총정리', keys: ['노인일자리', '노인 일자리'] },
+    { id: '75', date: '2026-10-22', title: '긴급복지지원제도 신청 자격·생계비 금액 2026년 총정리', keys: ['긴급복지'] },
+    { id: '74', date: '2026-10-21', title: '2027년 주거급여 선정기준·기준임대료와 지원금액 총정리', keys: ['주거급여'] },
+    { id: '73', date: '2026-10-20', title: '2026 어르신 독감·코로나19 무료 예방접종 대상 기간 방법 총정리', keys: ['인플루엔자', '독감', '코로나19 예방접종'] },
+    { id: '72', date: '2026-10-19', title: '2027년 기초연금 개편안 달라지는 점과 지급 금액·신청 방법 총정리', keys: ['기초연금'] },
+    { id: '71', date: '2026-10-18', title: '치매공공후견사업 치매안심신탁 신청 자격과 혜택 2026년 정리', keys: ['치매공공후견', '치매안심신탁'] },
+    { id: '70', date: '2026-10-17', title: '요양병원 간병비 급여화 지원 대상·본인부담금·2027년 일정 총정리', keys: ['요양병원 간병', '간병비'] },
+    { id: '69', date: '2026-10-16', title: '장기요양 복지용구 급여 연 한도액 160만원 품목 신청방법 2026', keys: ['복지용구'] },
+    { id: '68', date: '2026-10-15', title: '노인장기요양보험 등급 신청 방법·인정조사·등급판정 2026년 총정리', keys: ['장기요양'] },
+    { id: '67', date: '2026-10-14', title: '응급안전안심서비스 신청 자격과 장비 5종 2026년 총정리', keys: ['응급안전'] },
+    { id: '66', date: '2026-10-13', title: '노인맞춤돌봄서비스 신청 자격·내용·방법 2026년 총정리', keys: ['노인맞춤돌봄'] },
+    { id: '65', date: '2026-10-12', title: '2026년 동절기 에너지바우처 대상·금액·신청 방법 총정리', keys: ['에너지바우처'] },
+    { id: '64', date: '2026-10-11', title: '지역사회 통합돌봄 전국 확대 신청 자격 및 서비스 내용 2026년 총정리', keys: ['통합돌봄', '돌봄통합'] },
+    { id: '63', date: '2026-10-10', title: '2027년 기준중위소득 및 생계급여 선정기준·지원금액 총정리', keys: ['생계급여'] },
+    { id: '51', date: '2026-04-11', title: '서민금융 활성화 지원(햇살론youth 보증사업)', keys: ['햇살론'] },
+    { id: '50', date: '2026-04-09', title: '기존주택등 매입임대주택 지원사업', keys: ['매입임대'] },
+    { id: '49', date: '2026-04-06', title: '자립준비청년 자립수당 지급', keys: ['자립수당'] },
+    { id: '48', date: '2026-04-04', title: '[중앙정부] 생계급여(맞춤형 급여)', keys: ['생계급여'] },
+    { path: '/entry/중앙정부-발달장애인-공공후견지원-사업', date: '2026-03-07', title: '[중앙정부] 발달장애인 공공후견지원 사업', keys: ['발달장애인 공공후견', '공공후견'] },
+    { path: '/entry/부모님-용돈-고민-끝-2026-기초연금-인상-확정-자격조건-1분만에-보기', date: '2026-02-12', title: '2026 기초연금 인상 확정 (자격조건 1분만에 보기)', keys: ['기초연금'] },
+];
+
+function blogPostUrl(post) {
+    return BLOG_BASE + (post.path ? encodeURI(post.path) : `/${post.id}`);
+}
+
+// 오늘 공개돼 있는 글만 (예약 글은 오전 9시에 공개돼요)
+function isPublished(post) {
+    return new Date(`${post.date}T09:00:00+09:00`) <= new Date();
+}
+
+// 혜택 이름에 맞는 블로그 글 — 같은 제도 글이 여럿이면 가장 최근 글
+function blogPostFor(item) {
+    const name = (item.name || '').replace(/\s+/g, '');
+    return BLOG_POSTS.find(post => isPublished(post) && post.keys.some(k => name.includes(k.replace(/\s+/g, ''))));
+}
+
+function blogFeedHtml(post) {
+    const d = new Date(post.date);
+    const label = `${d.getMonth() + 1}.${d.getDate()}`;
+    return `<a class="article-item" href="${escapeHtml(post.url)}" target="_blank" rel="noopener">
+        <span class="vol">${label}</span>
+        <span class="text"><span class="title">${escapeHtml(post.title)}</span>
+        ${post.desc ? `<span class="desc">${escapeHtml(post.desc)}</span>` : ''}</span>
+    </a>`;
+}
+
+// 첫 화면 '블로그 새 글' — 블로그 RSS(api/blog-feed)를 읽고, 안 되면 위 목록으로 보여줘요.
+// 경로는 상대 경로여야 해요 (www.saboknote.com/benefits/ 아래에서 서비스되기 때문).
+async function renderBlogFeed() {
+    let posts = [];
+    try {
+        const r = await fetch('api/blog-feed?limit=4');
+        if (r.ok) posts = (await r.json()).posts || [];
+    } catch { /* 아래 목록으로 대신 보여줍니다 */ }
+    if (!posts.length) {
+        posts = BLOG_POSTS.filter(isPublished).slice(0, 4)
+            .map(p => ({ title: p.title, url: blogPostUrl(p), date: p.date, desc: '' }));
+    }
+    if (!posts.length) return;
+    $('blogList').innerHTML = posts.slice(0, 4).map(blogFeedHtml).join('');
+    $('blogBlock').hidden = false;
+}
+
 const AGE_TO_LIFECYCLE = { '10대이하': '청소년', '20대': '청년', '30대': '청년', '40대': '중장년', '50대': '중장년', '60대이상': '노년' };
 const OPTION_LABELS = Object.fromEntries(QUESTIONS.flatMap(q => (q.options || []).map(o => [o.value, o.label])));
 
@@ -714,6 +790,7 @@ function initHome() {
     const articles = [...NEWS_ARTICLES].sort((a, b) => articleNo(a) - articleNo(b));
     $('articleList').innerHTML = articles.slice(0, 4).map(articleHtml).join('');
     $('articleListAll').innerHTML = articles.map(articleHtml).join('');
+    renderBlogFeed();
     document.addEventListener('click', e => {
         const btn = e.target.closest('[data-article]');
         if (!btn) return;
@@ -1119,7 +1196,8 @@ function printResult() {
 function cardHtml(item, matched = []) {
     const url = safeUrl(item.applyUrl);
     const saved = isSaved(item.id);
-    const blogUrl = `https://10000nanzip.tistory.com/search/${encodeURIComponent(item.name)}`;
+    const post = blogPostFor(item);
+    const blogUrl = post ? blogPostUrl(post) : `${BLOG_BASE}/search/${encodeURIComponent(item.name)}`;
     return `<article class="card">
         <div class="card-head">
             <span class="card-icon" aria-hidden="true">${escapeHtml(item.icon)}</span>
